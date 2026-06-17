@@ -39,26 +39,17 @@
 (function () {
   'use strict';
   var CASES = [
-    /* ── small end (320 → 900px): il fuoco del lavoro responsive ── */
-    { name: 'PHONE — SMALL',     w: 320,  h: 568  },
-    { name: 'PHONE',             w: 360,  h: 640  },
-    { name: 'PHONE — LARGE',     w: 414,  h: 896  },
-    { name: 'PHONE — LANDSCAPE', w: 812,  h: 375  },
-    { name: 'TABLET (PORTRAIT)', w: 768,  h: 1024 },
-    /* ── desktop → 4K (già validato in MK11/MK12) ── */
-    { name: 'LAPTOP',         w: 1366, h: 768  },
-    { name: 'DESKTOP',        w: 1920, h: 1080 },
-    { name: 'LARGE MONITOR',  w: 2560, h: 1440 },
+    { name: 'LAPTOP',        w: 1366, h: 768  },
+    { name: 'DESKTOP',       w: 1920, h: 1080 },
+    { name: 'LARGE MONITOR', w: 2560, h: 1440 },
     { name: 'TV / PROJECTOR', w: 3840, h: 2160 }
   ];
-  var PREVIEW_W = 620;   /* larghezza max resa di ogni anteprima */
+  var PREVIEW_W = 620;   /* larghezza resa di ogni anteprima */
   var grid = document.getElementById('grid');
   var entries = [];
 
   CASES.forEach(function (c, idx) {
-    /* non ingrandire i viewport piccoli (telefoni): resa a px reali
-       fino a PREVIEW_W, solo i grandi vengono ridotti in scala */
-    var scale = Math.min(1, PREVIEW_W / c.w);
+    var scale = PREVIEW_W / c.w;
     var box = document.createElement('div');
     box.className = 'case';
     box.innerHTML =

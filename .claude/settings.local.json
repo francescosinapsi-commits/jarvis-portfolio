@@ -88,9 +88,7 @@
       "Bash(node --check script.js)",
       "Bash(grep -n -iE 'data-gfx=\"laptop\".*\\(#[0-9a-f]{0,2}[0-9a-f]*ff|rgb\\)' style.css)",
       "Bash(cd \"C:/Users/francesco/.claude/projects/C--Users-francesco-Desktop-PORTFOLIO-MK-15-PORTFOLIO/memory\")",
-      "Bash(cat MEMORY.md)",
-      "Read(//c/Users/francesco/.claude/**)",
-      "Read(//c/Users/francesco/.claude/plugins/**)"
+      "Bash(cat MEMORY.md)"
     ]
   }
 }

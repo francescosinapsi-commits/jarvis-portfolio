@@ -2766,64 +2766,12 @@
     const voiceStatus = document.getElementById('voice-status');
     const cmdPanel    = document.getElementById('voice-commands-panel');
 
-    /* `systemActive` declared BEFORE the no-SR guard so igniteSystem()
-       (the shared entry path) can run even when SpeechRecognition is
-       unavailable — otherwise the binding would be in the TDZ. */
-    let systemActive  = false;
-
-    /* ── IGNITION — single entry path shared by voice + tap ──────────
-       Effects of "JARVIS ACCENDITI": power the system on, start audio,
-       reveal the command legend. Idempotent. Triggered by the voice
-       command 'accensione' where supported, and by tapping the standby
-       screen everywhere (required so iOS Safari / non-HTTPS phones,
-       which have no SpeechRecognition, can still enter). */
-    function igniteSystem() {
-      if (systemActive) return;
-      systemActive = true;
-      document.body.classList.add('jarvis-on');   /* boot.js observes this */
-      if (voiceStatus) {
-        voiceStatus.textContent      = SR ? 'JARVIS_SYSTEM: LISTENING_'
-                                          : 'JARVIS_SYSTEM: ONLINE_';
-        voiceStatus.style.color      = '#39ff6e';
-        voiceStatus.style.textShadow = '0 0 12px #39ff6e';
-      }
-      bootFx.play().catch(() => {});
-      bgMusic.play().catch(() => {});
-      JarvisVoice.play('accensione');
-      if (cmdPanel) cmdPanel.classList.add('visible');
-    }
-
-    /* Tap / keyboard fallback on the standby cover. Wired BEFORE the
-       no-SR early-return so it works without voice. Voice ritual is
-       left untouched where SpeechRecognition exists. */
-    const standbyEl = document.getElementById('jarvis-standby');
-    if (standbyEl) {
-      const tapIgnite = () => igniteSystem();
-      standbyEl.addEventListener('pointerdown', tapIgnite, { passive: true });
-      standbyEl.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          e.preventDefault();
-          tapIgnite();
-        }
-      });
-      /* No voice engine → guide the user to tap instead of speak. */
-      if (!SR) {
-        standbyEl.classList.add('voice-unsupported');
-        standbyEl.setAttribute('role', 'button');
-        standbyEl.setAttribute('tabindex', '0');
-        standbyEl.setAttribute('aria-label', 'Tocca lo schermo per avviare l’esperienza');
-        const promptEl  = standbyEl.querySelector('.jsb-prompt');
-        const commandEl = standbyEl.querySelector('.jsb-command');
-        if (promptEl)  promptEl.textContent  = 'Per iniziare l’esperienza';
-        if (commandEl) commandEl.textContent = 'TOCCA LO SCHERMO';
-      }
-    }
-
     if (!SR) {
-      if (voiceStatus) voiceStatus.textContent = '◈ VOICE CTRL: NOT SUPPORTED — TAP TO START';
+      if (voiceStatus) voiceStatus.textContent = '◈ VOICE CTRL: NOT SUPPORTED';
       return;
     }
 
+    let systemActive  = false;
     const recognition = new SR();
     recognition.lang            = 'it-IT';
     recognition.continuous      = true;
@@ -2990,7 +2938,18 @@
 
       switch (action) {
         case 'accensione':
-          igniteSystem();
+          if (systemActive) break;
+          systemActive = true;
+          document.body.classList.add('jarvis-on');
+          if (voiceStatus) {
+            voiceStatus.textContent      = 'JARVIS_SYSTEM: LISTENING_';
+            voiceStatus.style.color      = '#39ff6e';
+            voiceStatus.style.textShadow = '0 0 12px #39ff6e';
+          }
+          bootFx.play().catch(() => {});
+          bgMusic.play().catch(() => {});
+          JarvisVoice.play('accensione');
+          if (cmdPanel) cmdPanel.classList.add('visible');
           break;
 
         case 'procedi':
