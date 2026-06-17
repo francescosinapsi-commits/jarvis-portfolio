@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Samuele Domenichini — Presentazione Maturità 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CONFIGURAZIONE TIPOGRAFICA E REGOLE DI STAMPA PDF */
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #111111;
+            --accent-blue: #5E7CFF;
+            --accent-violet: #B9A7FF;
+            --text-light: #FFFFFF;
+            --text-muted: #A2a2a7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* STRUTTURA DELLE SLIDE IN DIMENSIONI REALI A4 LANDSCAPE */
+        .slide {
+            width: 297mm;
+            height: 210mm;
+            padding: 20mm;
+            page-break-after: always;
+            position: relative;
+            background-color: var(--bg-dark);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* HEADER E FOOTER FISSI DEL BOOKLET */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 5mm;
+        }
+
+        .slide-header .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .slide-header .meta {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 4mm;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* CONTENUTI COPERTINA */
+        .cover-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .vinyl-placeholder {
+            width: 70mm;
+            height: 70mm;
+            border-radius: 50%;
+            background: radial-gradient(circle, #000 20%, #111 40%, #050505 70%);
+            border: 2px solid var(--accent-blue);
+            box-shadow: 0 0 30px rgba(94, 124, 255, 0.2);
+            margin-bottom: 8mm;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vinyl-inner {
+            width: 25mm;
+            height: 25mm;
+            background-color: var(--accent-violet);
+            border-radius: 50%;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-violet);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        /* STRUTTURA EDITORIALE TRACKLIST 70/30 */
+        .track-grid {
+            display: grid;
+            grid-template-columns: 165mm 72mm;
+            gap: 10mm;
+            flex-grow: 1;
+            align-items: center;
+            margin: 10mm 0;
+        }
+
+        .media-container {
+            width: 100%;
+            height: 115mm;
+            background-color: var(--bg-card);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .media-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-fallback-text {
+            position: absolute;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: rgba(255,255,255,0.05);
+            letter-spacing: 2px;
+        }
+
+        .meta-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .track-id {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .track-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .track-tag {
+            align-self: flex-start;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--accent-violet);
+            border: 1px solid rgba(185, 167, 255, 0.3);
+            padding: 3px 8px;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+
+        .track-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        /* CONSOLLE MIXER (COMPETENZE) */
+        .mixer-board {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 10mm;
+            flex-grow: 1;
+            margin: 10mm 0;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5mm;
+        }
+
+        .mixer-channel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 110mm;
+        }
+
+        .track-line {
+            width: 2px;
+            height: 70mm;
+            background-color: #000;
+            position: relative;
+        }
+
+        .fader {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 32px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 2px;
+        }
+
+        .fader::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-blue);
+        }
+
+        .channel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .channel-db {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-violet);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: COPERTINA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">S. DOMENICHINI</div>
+            <div class="meta">MATURITÀ 2026</div>
+        </div>
+        <div class="cover-content">
+            <div class="vinyl-placeholder"><div class="vinyl-inner"></div></div>
+            <h1>SAMUELE DOMENICHINI</h1>
+            <div class="subtitle">GRAFICA • PUBBLICITÀ • COMUNICAZIONE</div>
+        </div>
+        <div class="slide-footer">
+            <div>ISTITUTO CARLO URBANI — OSTIA</div>
+            <div>SLIDE 01</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: IL MANIFESTO -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">CONCEPT ALBUM</div>
+            <div class="meta">LIFE ON TRACK</div>
+        </div>
+        <div class="cover-content" style="max-width: 800px; margin: 0 auto; text-align: left; align-items: flex-start;">
+            <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; margin-bottom: 20px;">IL MANIFESTO PROGETTUALE</h2>
+            <p style="font-size: 1.2rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 30px;">
+                "Ogni progetto è una traccia del mio percorso." Non una semplice cartella di file digitali, ma un concept album visivo. Il mio percorso scolastico viene analizzato ed esposto secondo una metafora musicale: ogni pezzo descrive un traguardo tecnico e comunicativo ben preciso.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div>INTRODUZIONE OPERATIVA</div>
+            <div>SLIDE 02</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: CREDITS -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">BOOKLET INFO</div>
+            <div class="meta">CHI SONO</div>
+        </div>
+        <div class="track-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="media-container" style="height: 120mm; font-family:'Bebas Neue'; font-size:4rem; color:rgba(255,255,255,0.03)">
+                SAMUELE DOMENICHINI
+            </div>
+            <div class="meta-container">
+                <h2 style="font-family:'Bebas Neue'; font-size:3rem; margin-bottom:15px;">CREDITI FORMATIVI</h2>
+                <p class="track-text" style="font-size:1.1rem;">
+                    Frequento l'Istituto Carlo Urbani nel settore Grafica e Pubblicità. Attraverso lo studio dei flussi di lavoro di agenzia, della tipografia svizzera e del brand management, ho sviluppato un'identità progettuale definita. Il mio stile unisce l'espressività della cultura di strada e della comunicazione urban alla precisione millimetrica della grafica editoriale e vettoriale istituzionale.
+                </p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div>PROFILO DELLO STUDENTE</div>
+            <div>SLIDE 03</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: TRACK 01 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 01 MOCKUP</div>
+                <img src="immagini/sacred_oasis.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 01</div>
+                <h3 class="track-title">Sacred Oasis</h3>
+                <div class="track-tag">Brand & Packaging</div>
+                <p class="track-text">Studio di identità visiva per un brand premium di benessere. Il progetto esplora la simmetria geometrica e l'uso di palette cromatiche minimaliste e profonde. Il packaging combina texture tattili astratte a una pulizia tipografica sans-serif rigorosa, evocando un senso di lusso spirituale e purezza d'avanguardia.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 01</div><div>SLIDE 04</div></div>
+    </div>
+
+    <!-- SLIDE 5: TRACK 02 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 02 MOCKUP</div>
+                <img src="immagini/hotel_reverie.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 02</div>
+                <h3 class="track-title">Hotel Reverie</h3>
+                <div class="track-tag">Visual Communication</div>
+                <p class="track-text">Sviluppo del sistema d'immagine coordinata per un boutique hotel di lusso. La narrazione visiva si fonda su layout editoriali ad ampio respiro, contrasti cromatici ad alta densità e una scelta tipografica serif classica ma fortemente contemporanea. Un'estetica onirica che non rinuncia alla massima leggibilità formale.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 02</div><div>SLIDE 05</div></div>
+    </div>
+
+    <!-- SLIDE 6: TRACK 03 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 03 MOCKUP</div>
+                <img src="immagini/brochure_moma.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 03</div>
+                <h3 class="track-title">MOMA Brochure</h3>
+                <div class="track-tag">Editorial Design</div>
+                <p class="track-text">Progetto di impaginazione editoriale per una retrospettiva d'arte moderna. Ispirato ai canoni del design svizzero, il layout fa un uso rigoroso della gabbia modulare asimmetrica. Ampi spazi bianchi contrastano con blocchi di testo geometrici e campiture piene, trasformando l'oggetto editoriale in un'estensione dello spazio museale.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 03</div><div>SLIDE 06</div></div>
+    </div>
+
+    <!-- SLIDE 7: TRACK 04 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 04 MOCKUP</div>
+                <img src="immagini/asroma_rebranding.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 04</div>
+                <h3 class="track-title">Rebranding AS Roma</h3>
+                <div class="track-tag">Sports Rebranding</div>
+                <p class="track-text">Proposta di modernizzazione radicale degli asset visivi del club per l'era digitale. Lo stemma storico viene sintetizzato in un monogramma geometrico puro ad alto impatto. I leggendari colori Giallorossi vengono ricalibrati digitalmente per schermi e merchandising contemporanei, supportati da una tipografia custom dal taglio monumentale ed aggressivo.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 04</div><div>SLIDE 07</div></div>
+    </div>
+
+    <!-- SLIDE 8: TRACK 05 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 05 MOCKUP</div>
+                <img src="immagini/mappa_parco.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 05</div>
+                <h3 class="track-title">Mappa del Parco</h3>
+                <div class="track-tag">Infographic & Illustration</div>
+                <p class="track-text">Sintesi visiva ed infografica avanzata del territorio. Il progetto coniuga la precisione dell'iconografia vettoriale alla fluidità delle forme organiche naturali del parco. La palette cromatica armonica permette una distinzione immediata dei percorsi strutturati, bilanciando la complessità informativa con un'eccezionale pulizia estetica.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 05</div><div>SLIDE 08</div></div>
+    </div>
+
+    <!-- SLIDE 9: TRACK 06 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 06 MOCKUP</div>
+                <img src="immagini/corporate_kit.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 06</div>
+                <h3 class="track-title">Corporate Identity Kit</h3>
+                <div class="track-tag">Brand Identity</div>
+                <p class="track-text">Studio coordinato comprendente biglietto da visita, carta intestata e busta commerciale. Il toolkit istituzionale si focalizza sulla precisione millimetrica dell'allineamento. La riduzione del segno grafico ai minimi termini enfatizza la solidità professionale del brand attraverso un posizionamento micro-tipografico pulito ed impeccabile.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 06</div><div>SLIDE 09</div></div>
+    </div>
+
+    <!-- SLIDE 10: TRACK 07 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 07 MOCKUP</div>
+                <img src="immagini/locandina_mostra.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 07</div>
+                <h3 class="track-title">Locandina Mostra</h3>
+                <div class="track-tag">Poster Design</div>
+                <p class="track-text">Manifesto culturale d'avanguardia basato sulla decostruzione spaziale. Il design rompe le regole tipografiche classiche lavorando su contrasti estremi in bianco e nero. L'inserimento controllato di texture digitali grezze e sovrapposizioni asimmetriche genera una forte tensione visiva che aggancia all'istante lo sguardo.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 07</div><div>SLIDE 10</div></div>
+    </div>
+
+    <!-- SLIDE 11: TRACK 08 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 08 MOCKUP</div>
+                <img src="immagini/poster_butterfly.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 08</div>
+                <h3 class="track-title">Poster Butterfly</h3>
+                <div class="track-tag">Cyber Illustration</div>
+                <p class="track-text">Una celebrazione geometrica della simmetria biologica reinterpretata in chiave tecnologica. L'illustrazione principale fonde tracciati organici a sottili griglie vettoriali di impostazione cyber-punk. Il contrasto drammatico tra lo sfondo scuro e gli accenti neon blu e viola genera una straordinaria vibrazione visiva.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 08</div><div>SLIDE 11</div></div>
+    </div>
+
+    <!-- SLIDE 12: TRACK 09 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 09 MOCKUP</div>
+                <img src="immagini/carnevale_venezia.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 09</div>
+                <h3 class="track-title">Carnevale di Venezia</h3>
+                <div class="track-tag">Event Advertising</div>
+                <p class="track-text">Campagna pubblicitaria concettuale. Il visual fonde il mistero secolare della maschera classica con elementi espressivi digitali e glitch-art. La palette cromatica profonda, spezzata da bagliori viola al neon, reinterpreta la traditione veneziana con un linguaggio visivo tagliente, ipnotico e fortemente contemporaneo.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 09</div><div>SLIDE 12</div></div>
+    </div>
+
+    <!-- SLIDE 13: TRACK 10 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 10 MOCKUP</div>
+                <img src="immagini/noi_siamo_domani.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 10</div>
+                <h3 class="track-title">Noi Siamo Domani</h3>
+                <div class="track-tag">Social Campaign</div>
+                <p class="track-text">Campagna di comunicazione sociale ad altissimo impatto emotivo. Il layout è scandito da una tipografia bold extra-black che taglia lo spazio visivo diagonalmente, ancorandosi a scatti fotografici in bianco e nero ad alto contrasto. Un design focalizzato sul senso di urgenza e sul dinamismo giovanile.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 10</div><div>SLIDE 13</div></div>
+    </div>
+
+    <!-- SLIDE 14: TRACK 11 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 11 MOCKUP</div>
+                <img src="immagini/progetto_scarpa.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 11</div>
+                <h3 class="track-title">Progetto Scarpa</h3>
+                <div class="track-tag">Commercial Advertising</div>
+                <p class="track-text">Concept commerciale per calzature sportive ingegneristiche. La composizione visiva sfrutta direttrici di forza diagonali e fasci di luce radente per accentuare l'aerodinamicità strutturale del prodotto. L'impaginazione evoca i dettagli tecnici delle interfacce software di progettazione, unendo moda e tech.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 11</div><div>SLIDE 14</div></div>
+    </div>
+
+    <!-- SLIDE 15: TRACK 12 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container">
+                <div class="media-fallback-text">TRACK 12 MOCKUP</div>
+                <img src="immagini/tre_chicchi.jpg" alt="" onerror="this.style.display='none';">
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 12</div>
+                <h3 class="track-title">3 Chicchi</h3>
+                <div class="track-tag">Gourmet Packaging</div>
+                <p class="track-text">Identità di packaging per una linea di caffè biologico artigianale di alta gamma. Il brand fa leva su eleganti pattern geometrici minimalisti per differenziare le origini geografiche dei chicchi. L'estetica globale trasmette artigianalità e lusso ecocompatibile tramite scelte cartotecniche e tipografiche chiare e raffinate.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 12</div><div>SLIDE 15</div></div>
+    </div>
+
+    <!-- SLIDE 16: COMPETENZE -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">MIXER AUDIO</div>
+            <div class="meta">EQUALIZER PANEL</div>
+        </div>
+        <div class="mixer-board">
+            <div class="mixer-channel"><div class="channel-db">+9.2</div><div class="track-line"><div class="fader" style="bottom: 92%;"></div></div><div class="channel-title">Graphic Des.</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.8</div><div class="track-line"><div class="fader" style="bottom: 88%;"></div></div><div class="channel-title">Brand ID</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.5</div><div class="track-line"><div class="fader" style="bottom: 85%;"></div></div><div class="channel-title">Advertising</div></div>
+            <div class="mixer-channel"><div class="channel-db">+9.5</div><div class="track-line"><div class="fader" style="bottom: 95%;"></div></div><div class="channel-title">Illustrator</div></div>
+            <div class="mixer-channel"><div class="channel-db">+9.0</div><div class="track-line"><div class="fader" style="bottom: 90%;"></div></div><div class="channel-title">Photoshop</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.7</div><div class="track-line"><div class="fader" style="bottom: 87%;"></div></div><div class="channel-title">Visual Comm.</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.4</div><div class="track-line"><div class="fader" style="bottom: 84%;"></div></div><div class="channel-title">Packaging</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.9</div><div class="track-line"><div class="fader" style="bottom: 89%;"></div></div><div class="channel-title">Editorial Des.</div></div>
+        </div>
+        <div class="slide-footer"><div>CONTROLLO PARAMETRICI COMPRENSIVI</div><div>SLIDE 16</div></div>
+    </div>
+
+    <!-- SLIDE 17: OUTRO -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">S. DOMENICHINI</div>
+            <div class="meta">OUTRO DISSOLVENZA</div>
+        </div>
+        <div class="cover-content">
+            <p class="outro-text-statement" style="font-size: 1.8rem; max-width: 750px; line-height: 1.5; font-weight: 300; margin-bottom: 30px; color:#f5f5f7;">
+                "Questo portfolio raccoglie le tracce che raccontano la mia crescita creativa."
+            </p>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; letter-spacing: 2px;">SAMUELE DOMENICHINI</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 4px; color: var(--accent-blue); text-transform: uppercase;">Grafica • Pubblicità • Comunicazione</div>
+        </div>
+        <div class="slide-footer">
+            <div>FINE RIPRODUZIONE // GRAZIE PER L'ATTENZIONE</div>
+            <div>SLIDE 17</div>
+        </div>
+    </div>
+
+</body>
+</html>

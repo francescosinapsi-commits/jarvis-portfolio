@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Samuele Domenichini — Presentazione Esame di Stato 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #111111;
+            --bg-inner: #1A1A1A;
+            --accent-blue: #5E7CFF;
+            --accent-violet: #B9A7FF;
+            --text-light: #FFFFFF;
+            --text-muted: #A2a2a7;
+        }
+
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .slide {
+            width: 297mm;
+            height: 210mm;
+            padding: 15mm 20mm;
+            page-break-after: always;
+            position: relative;
+            background-color: var(--bg-dark);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 4mm;
+        }
+
+        .slide-header .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .slide-header .meta {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 4mm;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .cover-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .vinyl-placeholder {
+            width: 65mm;
+            height: 65mm;
+            border-radius: 50%;
+            background: radial-gradient(circle, #000 20%, #111 40%, #050505 70%);
+            border: 2px solid var(--accent-blue);
+            box-shadow: 0 0 30px rgba(94, 124, 255, 0.2);
+            margin-bottom: 6mm;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .vinyl-inner {
+            width: 22mm;
+            height: 22mm;
+            background: radial-gradient(circle, #fff 10%, var(--accent-violet) 80%);
+            border-radius: 50%;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4.8rem;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: var(--accent-violet);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        .track-grid {
+            display: grid;
+            grid-template-columns: 165mm 72mm;
+            gap: 15mm;
+            flex-grow: 1;
+            align-items: center;
+            margin: 8mm 0;
+        }
+
+        .media-container {
+            width: 100%;
+            height: 125mm;
+            background-color: var(--bg-card);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .meta-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .track-id {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .track-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .track-tag {
+            align-self: flex-start;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--accent-violet);
+            border: 1px solid rgba(185, 167, 255, 0.3);
+            padding: 3px 8px;
+            border-radius: 2px;
+            margin-bottom: 15px;
+        }
+
+        .track-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        /* PALETTE VECTOR SYSTEM */
+        .palette-showcase {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            width: 90%;
+            height: 70mm;
+            gap: 5mm;
+        }
+        .color-block {
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* MIXER AUDIO STYLE */
+        .mixer-board {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 8mm;
+            flex-grow: 1;
+            margin: 8mm 0;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5mm;
+        }
+        .mixer-channel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 120mm;
+        }
+        .track-line {
+            width: 2px;
+            height: 75mm;
+            background-color: #000;
+            position: relative;
+        }
+        .fader {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 32px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 2px;
+        }
+        .fader::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-blue);
+        }
+        .channel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 700;
+        }
+        .channel-db {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-violet);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: COPERTINA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">S. DOMENICHINI</div>
+            <div class="meta">MATURITÀ 2026</div>
+        </div>
+        <div class="cover-content">
+            <div class="vinyl-placeholder"><div class="vinyl-inner"></div></div>
+            <h1>SAMUELE DOMENICHINI</h1>
+            <div class="subtitle">GRAFICA • PUBBLICITÀ • COMUNICAZIONE</div>
+        </div>
+        <div class="slide-footer">
+            <div>ISTITUTO CARLO URBANI — OSTIA</div>
+            <div>SLIDE 01</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: IL MANIFESTO NARRATIVO -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">CONCEPT ALBUM</div>
+            <div class="meta">LIFE ON TRACK</div>
+        </div>
+        <div class="cover-content" style="max-width: 850px; margin: 0 auto; text-align: left; align-items: flex-start;">
+            <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; margin-bottom: 20px; color: var(--accent-blue);">LIFE ON TRACK: IL MANIFESTO</h2>
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 30px;">
+                "Ogni progetto è una traccia del mio percorso." Questo portfolio applica le dinamiche e le atmosfere dell'universo musicale urban ed hip-hop italiano alla struttura formale di un esame di comunicazione visiva. Ogni modulo, brand kit e impaginazione viene trattato ed esposto come una singola traccia d'autore, descrivendone l'identità formale e l'evoluzione metodologica.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div>DIREZIONE ARTISTICA & METAFORA VISIVA</div>
+            <div>SLIDE 02</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: CREDITS (CHI SONO) -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">BOOKLET INFO</div>
+            <div class="meta">CHI SONO</div>
+        </div>
+        <div class="track-grid" style="grid-template-columns: 1fr 1fr;">
+            <!-- CSS Vettoriale Logo Personale dell'Immagine 7 -->
+            <div class="media-container" style="background-color: #ffffff; flex-direction: column;">
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                    <span style="font-family: 'Inter', sans-serif; font-size: 9rem; font-weight: 300; color: #2D52B9; line-height: 1;">S</span>
+                    <span style="font-family: 'Inter', sans-serif; font-size: 9rem; font-weight: 400; color: #1A1A1A; line-height: 1; margin-left: -10px;">D</span>
+                </div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #555; letter-spacing: 2px; text-transform: uppercase;">Solo fantasia e creatività</div>
+            </div>
+            <div class="meta-container">
+                <h2 style="font-family:'Bebas Neue'; font-size:3rem; margin-bottom:15px; color: var(--accent-violet);">SAMUELE DOMENICHINI</h2>
+                <p class="track-text" style="font-size:1.05rem; margin-bottom: 20px;">
+                    Studente dell'Istituto Carlo Urbani nell'indirizzo Grafica e Pubblicità. Unisco l'ispirazione estetica urban contemporanea a flussi rigorosi di progettazione, impaginazione geometrica basata su griglie e calibrazione vettoriale avanzata.
+                </p>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; color: var(--text-muted); line-height: 1.8;">
+                    📍 Via dell'Idroscalo, 88, Roma RM<br>
+                    📧 gd.domenichini@gmail.com<br>
+                    🌐 www.gd.domenichini.it
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div>PROFILO EDITORIALE DELLO STUDENTE</div>
+            <div>SLIDE 03</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: TRACK 01 — SACRED OASIS -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- CSS Vettoriale Palette Esatta dell'Immagine 2 -->
+            <div class="media-container" style="flex-direction: column; background-color: #0b0b0d;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #fff; margin-bottom: 10px; letter-spacing: 2px;">SACRED OASIS PALETTE</div>
+                <div class="palette-showcase">
+                    <div class="color-block" style="background-color: #F0B2BF;">#F0B2BF</div>
+                    <div class="color-block" style="background-color: #7F79B9; color: #fff;">#7F79B9</div>
+                    <div class="color-block" style="background-color: #F9CB97;">#F9CB97</div>
+                    <div class="color-block" style="background-color: #F1CDCC;">#F1CDCC</div>
+                </div>
+                <div style="margin-top: 15px; font-family: 'Georgia', serif; font-size: 1.2rem; font-style: italic; color: var(--accent-violet);">Font Utilizzato: Cassandra</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 01</div>
+                <h3 class="track-title">Sacred Oasis</h3>
+                <div class="track-tag">Brand Identity & Packaging</div>
+                <p class="track-text">Studio visivo strutturato su una palette cromatica pastello ben definita. Il packaging unisce geometrie pulite a una sensibilità cromatica delicata, ottimizzando il contrasto tra toni caldi e freddi per comunicare armonia ed eleganza visiva.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 01</div><div>SLIDE 04</div></div>
+    </div>
+
+    <!-- SLIDE 5: TRACK 02 — HOTEL REVERIE -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- Testo Esatto di Black Mirror della tua Immagine 11 -->
+            <div class="media-container" style="padding: 10mm; background-color: #1a1a24; border-left: 4px solid #ff3b30; flex-direction: column; align-items: flex-start; justify-content: center;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: #ff3b30; margin-bottom: 15px; letter-spacing: 1px;">BLACK MIRROR S7 COMPOSITION</div>
+                <p style="font-family: 'Inter', sans-serif; font-size: 1rem; line-height: 1.6; color: #ececf1; text-align: justify;">
+                    Hotel Reverie è il terzo episodio di Black Mirror 7 e uno dei più apprezzati. La storia inizia con Hollywood che rilancia un vecchio film chiamato Hotel Reverie usando una nuova tecnologia. La star Brandy Friday interpreta un ruolo modificato e si trova intrappolata nel film. Deve seguire la sceneggiatura per tornare indietro mentre tutto va storto. L'episodio esplora il tema della riscrittura dei classici e i limiti dell'industria cinematografica.
+                </p>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 02</div>
+                <h3 class="track-title">Hotel Reverie</h3>
+                <div class="track-tag">Visual Identity Layout</div>
+                <p class="track-text">Progetto editoriale ispirato alle atmosfere distopiche e cinematografiche della serie televisiva. Il focus progettuale analizza la gabbia grafica e la destrutturazione dei testi commerciali associati all'industria multimediale odierna.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 02</div><div>SLIDE 05</div></div>
+    </div>
+
+    <!-- SLIDE 6: TRACK 03 — MOMA BROCHURE -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container" style="background: linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #222 75%), linear-gradient(-45deg, transparent 75%, #222 75%); background-size: 20px 20px; background-color: #111;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: #fff; border: 5px solid #fff; padding: 10px 30px; background-color: #000;">MOMA</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 03</div>
+                <h3 class="track-title">MOMA Brochure</h3>
+                <div class="track-tag">Editorial Design</div>
+                <p class="track-text">Impaginazione asimmetrica per una brochure artistica istituzionale. Il design segue le metodologie del Bauhaus e della scuola svizzera, organizzando l'informazione in moduli geometrici rigorosi e bilanciando accuratamente spazi vuoti e pesi tipografici.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 03</div><div>SLIDE 06</div></div>
+    </div>
+
+    <!-- SLIDE 7: TRACK 04 — REBRANDING AS ROMA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- CSS Vettoriale Ricostruito dal tuo Marchio dell'Immagine 8 -->
+            <div class="media-container" style="background-color: #111116; flex-direction: column;">
+                <div style="border: 2px solid #8F1C1E; padding: 15px 30px; border-radius: 4px; text-align: center; background-color: #050508;">
+                    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #8F1C1E; letter-spacing: 8px; line-height: 1;">AS</div>
+                    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #8F1C1E; letter-spacing: 8px; line-height: 1; margin-top: -5px;">ROMA</div>
+                    <div style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #DDA15E; letter-spacing: 4px; font-weight: bold; margin-top: 5px;">1927</div>
+                </div>
+                <div style="margin-top: 15px; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Concept: Testa di Lupo e Spada Simmetrica</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 04</div>
+                <h3 class="track-title">Rebranding AS Roma</h3>
+                <div class="track-tag">Sports Branding</div>
+                <p class="track-text">Studio di modernizzazione dell'identità dello storico club sportivo. Il marchio unisce l'elemento araldico della lupaCapitolina e della spada verticale ad una sintesi geometrica pulita, pensata per una resa impeccabile sui supporti digitali contemporanei.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 04</div><div>SLIDE 07</div></div>
+    </div>
+
+    <!-- SLIDE 8: TRACK 05 — BOSCO DEI 7 COLLI -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- Dati Esatti della Leggenda dell'Immagine 4 -->
+            <div class="media-container" style="background-color: #161a1d; padding: 10mm; flex-direction: column; align-items: flex-start;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--accent-blue); margin-bottom: 10px; letter-spacing: 1px;">LEGGENDA: BOSCO DEI 7 COLLI</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 15px; font-family: 'Montserrat', sans-serif; font-size: 1.1rem; width: 100%; color: #fff;">
+                    <div><b style="color:var(--accent-blue);">1.</b> Caseificio</div>
+                    <div><b style="color:var(--accent-blue);">2.</b> Fattoria</div>
+                    <div><b style="color:var(--accent-blue);">3.</b> Parco giochi</div>
+                    <div><b style="color:var(--accent-blue);">4.</b> Pista ciclabile</div>
+                    <div><b style="color:var(--accent-blue);">5.</b> Bagni</div>
+                    <div><b style="color:var(--accent-blue);">6.</b> Campi sportivi</div>
+                </div>
+                <div style="margin-top: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: rgba(255,255,255,0.2); letter-spacing: 5px;">SINTESI TERRITORIALE (ROMA)</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 05</div>
+                <h3 class="track-title">Bosco dei 7 colli</h3>
+                <div class="track-tag">Infographic & Map Design</div>
+                <p class="track-text">Sviluppo infografico vettoriale per la cartografia di un parco polifunzionale. La mappa organizza razionalmente l'itinerario e i punti di interesse locali mediante l'uso coordinato di icone geometriche e indici numerici ad alta leggibilità.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 05</div><div>SLIDE 08</div></div>
+    </div>
+
+    <!-- SLIDE 9: TRACK 06 — CORPORATE IDENTITY KIT -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- CSS Vettoriale Ricostruito dalla tua Biglietto da Visita dell'Immagine 9 -->
+            <div class="media-container" style="background-color: #0d0d0f; flex-direction: column; justify-content: center; gap: 5mm;">
+                <!-- Fronte Biglietto -->
+                <div style="width: 90mm; height: 45mm; background-color: #fff; border: 1px solid #ddd; padding: 10px; display: flex; justify-content: space-between; align-items: center; color: #000;">
+                    <div style="text-align: left;">
+                        <div style="font-family:'Bebas Neue', sans-serif; font-size: 1.3rem; font-weight: bold; line-height:1;">SAMUELE DOMENICHINI</div>
+                        <div style="font-size: 0.65rem; color: #555; font-family:'Montserrat'; letter-spacing:1px; margin-top:2px;">Graphic designer</div>
+                    </div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #2D52B9; border: 1px solid #000; padding: 2px 8px;">SD</div>
+                </div>
+                <!-- Retro Biglietto -->
+                <div style="width: 90mm; height: 45mm; background-color: #fff; border: 1px solid #ddd; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; color: #000; font-family:'Montserrat'; font-size: 0.55rem; line-height: 1.5;">
+                    <div style="font-family:'Bebas Neue'; font-size: 1.1rem; line-height:1; margin-bottom:5px;">SAMUELE DOMENICHINI</div>
+                    <div>📧 gd.domenichini@gmail.com</div>
+                    <div>📞 +39 345 657 7886</div>
+                    <div>🌐 www.gd.domenichini.it</div>
+                    <div>📍 Via dell'Idroscalo, 88, Roma RM</div>
+                </div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 06</div>
+                <h3 class="track-title">Corporate Identity</h3>
+                <div class="track-tag">Stationery Kit</div>
+                <p class="track-text">Sviluppo dell'immagine coordinata aziendale. Il kit comprende lo studio di biglietti da visita d'agenzia fronte/retro, carta intestata e busta commerciale, impostando le geometrie e le distanze tipografiche secondo standard di stampa industriali.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 06</div><div>SLIDE 09</div></div>
+    </div>
+
+    <!-- SLIDE 10: TRACK 07 — LOCANDINA MOSTRA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container" style="background-color: #fff; color: #000; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 5rem; letter-spacing: -2px; line-height: 0.9;">ART<br>EXHIBITION</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: bold; letter-spacing: 5px; margin-top: 15px; border-top: 2px solid #000; padding-top: 5px;">CONTEMPORARY SHOW</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 07</div>
+                <h3 class="track-title">Locandina Mostra</h3>
+                <div class="track-tag">Poster Design</div>
+                <p class="track-text">Manifesto culturale impostato su forti contrasti cromatici e composizioni tipografiche destrutturate. L'elaborato indaga le metodologie di comunicazione visiva di eventi pubblici e rassegne d'arte contemporanea.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 07</div><div>SLIDE 10</div></div>
+    </div>
+
+    <!-- SLIDE 11: TRACK 08 — POSTER BUTTERFLY -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- Dati Esatti del Poster Farfalla dell'Immagine 3 -->
+            <div class="media-container" style="background: linear-gradient(180deg, #1A1A2E 0%, #16213E 100%); flex-direction: column;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 6rem; color: #00e5ff; text-shadow: 0 0 20px rgba(0,229,255,0.4); line-height: 1;">BUTTERFLY</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: #fff; letter-spacing: 6px; text-transform: uppercase; margin-top: 5px;">sky & water</div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--accent-violet); margin-top: 10px;">J</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 08</div>
+                <h3 class="track-title">Poster Butterfly</h3>
+                <div class="track-tag">Cyber Illustration</div>
+                <p class="track-text">Manifesto illustrativo concettuale basato sulla simmetria naturale. Il layout integra vettori organici a tracciati cyber-punk su sfumature cromatiche profonde, evocando la sintesi geometrica tra cielo e acqua.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 08</div><div>SLIDE 11</div></div>
+    </div>
+
+    <!-- SLIDE 12: TRACK 09 — CARNEVALE DI VENEZIA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- Testi e Citazioni del Salvador Dalì estratti dall'Immagine 5 -->
+            <div class="media-container" style="background-color: #08070a; padding: 10mm; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px dashed rgba(255,255,255,0.1);">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 3.2rem; color: var(--accent-violet); letter-spacing: 2px; line-height: 1;">CARNEVALE DI VENEZIA 2024</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #fff; letter-spacing: 3px; margin: 10px 0;">DAL 11 AL 17 FEBBRAIO</div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent-blue); letter-spacing: 4px; margin-top: 10px;">REMEMBER THE FUTURE</div>
+                <p style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-style: italic; color: var(--text-muted); margin-top: 20px; max-width: 80%;">
+                    "Più di tutto mi ricordo il futuro"<br><small style="font-weight: bold; color: #fff; font-style: normal; font-size: 0.8rem;">— S. DALÌ</small>
+                </p>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 09</div>
+                <h3 class="track-title">Carnevale di Venezia</h3>
+                <div class="track-tag">Event Advertising</div>
+                <p class="track-text">Campagna pubblicitaria per l'evento internazionale veneziano. Il concept grafico elabora la dicotomia tra storicità e proiezione futura, sfruttando la celebre citazione surrealista di Salvador Dalì come asse portante della comunicazione visiva.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 09</div><div>SLIDE 12</div></div>
+    </div>
+
+    <!-- SLIDE 13: TRACK 10 — NOI SIAMO DOMANI -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <div class="media-container" style="background: linear-gradient(135deg, #5E7CFF 0%, #B9A7FF 100%);">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 4.5rem; color: #000; transform: rotate(-5deg); font-weight: 900; letter-spacing: 1px;">NOI SIAMO DOMANI</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 10</div>
+                <h3 class="track-title">Noi Siamo Domani</h3>
+                <div class="track-tag">Social Campaign</div>
+                <p class="track-text">Sviluppo di una campagna pubblicitaria di rilevanza sociale. L'impostazione grafica fa uso di macro-tipografie bold ad alto contrasto per catturare l'attenzione e trasmettere un forte senso di urgenza e prospettiva generazionale.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 10</div><div>SLIDE 13</div></div>
+    </div>
+
+    <!-- SLIDE 14: TRACK 11 — PROGETTO SCARPA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- Struttura e dicitura AD20OM estratti dall'Immagine 6 -->
+            <div class="media-container" style="background: radial-gradient(circle, #2a4494 0%, #0d1326 100%); flex-direction: column;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 7rem; color: rgba(255,255,255,0.06); letter-spacing: 10px; position: absolute;">SHOES</div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: #00e5ff; z-index: 5; border: 2px solid #00e5ff; padding: 5px 20px;">AD20OM CONCEPT</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; color: #fff; letter-spacing: 3px; margin-top: 10px; z-index: 5; text-transform: uppercase;">Sportswear Visual Design</div>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 11</div>
+                <h3 class="track-title">Progetto Scarpa</h3>
+                <div class="track-tag">Commercial Advertising</div>
+                <p class="track-text">Concept pubblicitario per calzature sportive high-tech (AD20OM). Il design sfrutta linee di forza diagonali, elementi grafici dinamici a fulmine e texture sature su sfondo cielo/acqua per valorizzare l'aerodinamicità del prodotto commerciale.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 11</div><div>SLIDE 14</div></div>
+    </div>
+
+    <!-- SLIDE 15: TRACK 12 — 13 CHICCHI -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">VISUAL TRACKLIST</div>
+            <div class="meta">PROJECT PORTFOLIO</div>
+        </div>
+        <div class="track-grid">
+            <!-- Testo Integrale e Reale Estratto dall'Immagine 10 (13 Chicchi) -->
+            <div class="media-container" style="background-color: #14100e; padding: 10mm; flex-direction: column; justify-content: center; align-items: flex-start; border-left: 4px solid #d4a373;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: #d4a373; line-height: 1;">13 CHICCHI</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: #fff; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">Il gusto italiano del caffè</div>
+                <p style="font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: #e0d4cc; text-align: justify;">
+                    13 Chicchi produce caffè di elevata qualità dall'aroma inconfondibile e un gusto delicato e cremoso, tipici del vero espresso italiano. Esso si contraddistingue per gli originali criteri di lavorazione.
+                </p>
+            </div>
+            <div class="meta-container">
+                <div class="track-id">TRACK 12</div>
+                <h3 class="track-title">13 Chicchi</h3>
+                <div class="track-tag">Gourmet Packaging</div>
+                <p class="track-text">Sviluppo dell'identità di marca e del sistema di confezionamento per una linea di caffè artigianale. Lo stile unisce la tradizione dell'espresso italiano ad un design geometrico minimale e pulito, volto a valorizzare l'alta qualità del prodotto.</p>
+            </div>
+        </div>
+        <div class="slide-footer"><div>PROGETTO 12</div><div>SLIDE 15</div></div>
+    </div>
+
+    <!-- SLIDE 16: COMPETENZE (PANNELLO MIXER AUDIO) -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">MIXER AUDIO</div>
+            <div class="meta">EQUALIZER PANEL</div>
+        </div>
+        <div class="mixer-board">
+            <div class="mixer-channel"><div class="channel-db">+9.2</div><div class="track-line"><div class="fader" style="bottom: 92%;"></div></div><div class="channel-title">Graphic Des.</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.8</div><div class="track-line"><div class="fader" style="bottom: 88%;"></div></div><div class="channel-title">Brand ID</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.5</div><div class="track-line"><div class="fader" style="bottom: 85%;"></div></div><div class="channel-title">Advertising</div></div>
+            <div class="mixer-channel"><div class="channel-db">+9.5</div><div class="track-line"><div class="fader" style="bottom: 95%;"></div></div><div class="channel-title">Illustrator</div></div>
+            <div class="mixer-channel"><div class="channel-db">+9.0</div><div class="track-line"><div class="fader" style="bottom: 90%;"></div></div><div class="channel-title">Photoshop</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.7</div><div class="track-line"><div class="fader" style="bottom: 87%;"></div></div><div class="channel-title">Visual Comm.</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.4</div><div class="track-line"><div class="fader" style="bottom: 84%;"></div></div><div class="channel-title">Packaging</div></div>
+            <div class="mixer-channel"><div class="channel-db">+8.9</div><div class="track-line"><div class="fader" style="bottom: 89%;"></div></div><div class="channel-title">Editorial Des.</div></div>
+        </div>
+        <div class="slide-footer"><div>QUADRO COMPETENZE TECNICHE REALI</div><div>SLIDE 16</div></div>
+    </div>
+
+    <!-- SLIDE 17: OUTRO CONCLUSIVA -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="logo">S. DOMENICHINI</div>
+            <div class="meta">OUTRO DISSOLVENZA</div>
+        </div>
+        <div class="cover-content">
+            <p style="font-size: 1.8rem; max-width: 780px; line-height: 1.5; font-weight: 300; margin-bottom: 25px; color:#f5f5f7; font-style: italic;">
+                "Questo portfolio raccoglie le tracce che raccontano la mia crescita creativa."
+            </p>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; letter-spacing: 2px; color: var(--accent-blue);">SAMUELE DOMENICHINI</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 0.85rem; letter-spacing: 4px; color: var(--text-light); text-transform: uppercase;">Grafica • Pubblicità • Comunicazione Visiva</div>
+        </div>
+        <div class="slide-footer">
+            <div>FINE RIPRODUZIONE // GRAZIE PER L'ATTENZIONE</div>
+            <div>SLIDE 17</div>
+        </div>
+    </div>
+
+</body>
+</html>

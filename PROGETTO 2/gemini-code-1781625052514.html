@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samuele Domenichini — Digital Portfolio</title>
+    <style>
+        /* BASE & PREMIUM VARIABLES */
+        :root {
+            --bg-color: #0a0a0a;
+            --surface-color: #161616;
+            --text-color: #ffffff;
+            --text-muted: #8e8e93;
+            --accent-neon: #00e5ff;
+            --accent-purple: #bf5af2;
+            --font-editorial: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-editorial);
+            overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
+            letter-spacing: -0.02em;
+        }
+
+        /* CUSTOM SELECTION */
+        ::selection {
+            background-color: var(--accent-purple);
+            color: white;
+        }
+
+        /* HEADER NAV */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.8), rgba(10,10,10,0));
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .school-tag {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 10%;
+            position: relative;
+            background: radial-gradient(circle at 80% 20%, rgba(191, 90, 242, 0.08), transparent 50%);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 6rem);
+            font-weight: 900;
+            line-height: 0.95;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: revealUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+        }
+
+        .hero h2 {
+            font-size: clamp(1rem, 2vw, 1.8rem);
+            font-weight: 400;
+            color: var(--accent-neon);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: revealUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 1.5vw, 2rem);
+            max-width: 600px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
+        }
+
+        /* ABOUT SECTION */
+        .about {
+            padding: 15vh 10%;
+            border-top: 1px solid #222;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+        }
+
+        .about-text {
+            font-size: clamp(1.2rem, 2vw, 1.7rem);
+            line-height: 1.5;
+            color: #f2f2f7;
+            grid-column: 1 / -1;
+            max-width: 900px;
+        }
+
+        @media (min-width: 768px) {
+            .about-text { grid-column: 2 / 3; }
+        }
+
+        /* PROJECTS SHOWCASE (CINEMATIC SCROLL LAYOUTS) */
+        .projects-container {
+            padding: 0 5%;
+        }
+
+        .project-card {
+            min-height: 80vh;
+            margin: 15vh 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: var(--transition-smooth);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .project-wrapper {
+                grid-template-columns: 12fr 7fr;
+            }
+            /* Alternating asymmetric structural grid layouts */
+            .project-card:nth-child(even) .project-wrapper {
+                direction: rtl;
+            }
+            .project-card:nth-child(even) .project-info {
+                direction: ltr;
+                padding-right: 50px;
+            }
+            .project-card:nth-child(3n) .project-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+        }
+
+        .project-media {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            background-color: var(--surface-color);
+            aspect-ratio: 16 / 10;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            group: hover;
+        }
+
+        .project-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-media:hover .project-img {
+            transform: scale(1.04);
+        }
+
+        .project-info {
+            padding: 10px;
+        }
+
+        .project-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-neon);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .project-title {
+            font-size: clamp(1.8rem, 3vw, 3rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .project-desc {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            text-align: justify;
+        }
+
+        /* SKILLS SECTION */
+        .skills {
+            padding: 15vh 10%;
+            background-color: #0f0f0f;
+            border-top: 1px solid #1c1c1e;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .skill-item {
+            background-color: var(--surface-color);
+            padding: 30px;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent-purple);
+            transition: var(--transition-smooth);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            border-left-color: var(--accent-neon);
+            background-color: #1e1e1e;
+        }
+
+        .skill-item h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* CONCLUSION & FOOTER */
+        .conclusion {
+            padding: 20vh 10% 10vh 10%;
+            text-align: center;
+            background: linear-gradient(to bottom, #0f0f0f, #050505);
+            position: relative;
+        }
+
+        .conclusion-text {
+            font-size: clamp(1.4rem, 3vw, 2.5rem);
+            max-width: 900px;
+            margin: 0 auto 60px auto;
+            line-height: 1.4;
+            font-weight: 300;
+        }
+
+        footer {
+            margin-top: 100px;
+            padding-top: 40px;
+            border-top: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (min-width: 768px) {
+            footer {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        /* ANIMATIONS KEYFRAMES */
+        @keyframes revealUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <div class="logo">S. Domenichini</div>
+        <div class="school-tag">Carlo Urbani — Ostia</div>
+    </header>
+
+    <!-- MAIN HERO CONTAINER -->
+    <section class="hero">
+        <h1>Samuele Domenichini</h1>
+        <h2>Grafica • Pubblicità • Comunicazione Visiva</h2>
+        <p>"Un percorso creativo tra branding, comunicazione visiva e progettazione grafica."</p>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about">
+        <div class="section-title">Chi Sono</div>
+        <p class="about-text">
+            Mi chiamo Samuele Domenichini e frequento l'Istituto Carlo Urbani di Ostia nell'indirizzo Grafica, Pubblicità e Tecniche della Comunicazione. Durante il mio percorso ho sviluppato competenze nella progettazione grafica, nel branding, nella comunicazione visiva e nella realizzazione di prodotti destinati alla promozione di aziende, eventi e servizi. Questo portfolio raccoglie alcuni dei progetti che rappresentano maggiormente la mia crescita creativa e tecnica.
+        </p>
+    </section>
+
+    <!-- PROJECTS VIEW SHOWCASE -->
+    <main class="projects-container">
+        
+        <!-- PROGETTO 1 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Sacred Oasis">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Brand Identity & Packaging</div>
+                    <h3 class="project-title">Sacred Oasis</h3>
+                    <p class="project-desc">Studio di identità visiva per un brand premium di benessere. Il progetto esplora la simmetria geometrica e l'uso di palette cromatiche minimaliste e profonde. Il packaging combina texture tattili astratte a una pulizia tipografica sans-serif rigorosa, evocando un senso di lusso spirituale e purezza d'avanguardia.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 2 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Hotel Reverie">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Visual Communication</div>
+                    <h3 class="project-title">Hotel Reverie</h3>
+                    <p class="project-desc">Sviluppo del sistema d'immagine coordinata per un boutique hotel di lusso. La narrazione visiva si fonda su layout editoriali ad ampio respiro, contrasti cromatici ad alta densità e una scelta tipografica serif classica ma fortemente contemporanea. Un'estetica onirica che non rinuncia alla massima leggibilità formale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 3 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Brochure MOMA">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Editorial Design</div>
+                    <h3 class="project-title">Brochure MOMA</h3>
+                    <p class="project-desc">Progetto di impaginazione editoriale per una retrospettiva d'arte moderna. Ispirato ai canoni del design svizzero, il layout fa un uso rigoroso della gabbia modulare asimmetrica. Ampi spazi bianchi contrastano con blocchi di testo geometrici e campiture piene, trasformando l'oggetto editoriale in un'estensione stessa dello spazio museale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 4 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Corporate Kit">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Brand Identity</div>
+                    <h3 class="project-title">Corporate Identity Kit</h3>
+                    <p class="project-desc">Studio coordinato comprendente biglietto da visita, carta intestata e busta commerciale. Il toolkit istituzionale si focalizza sulla precisione millimetrica dell'allineamento. La riduzione del segno grafico ai minimi termini enfatizza la solidità professionale del brand attraverso un posizionamento micro-tipografico pulito ed impeccabile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 5 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Mappa del Parco">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Visual Communication & Illustration</div>
+                    <h3 class="project-title">Mappa illustrativa del parco</h3>
+                    <p class="project-desc">Sintesi visiva ed infografica avanzata del territorio. Il progetto coniuga la precisione dell'iconografia vettoriale alla fluidità delle forme organiche naturali del parco. La palette cromatica armonica permette una distinzione immediata dei percorsi strutturati, bilanciando perfettamente la complessità informativa con un'eccezionale pulizia estetica.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 6 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="AS Roma Rebranding">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Rebranding</div>
+                    <h3 class="project-title">Rebranding AS Roma</h3>
+                    <p class="project-desc">Proposta di modernizzazione radicale degli asset visivi del club per l'era digitale. Lo stemma storico viene sintetizzato in un monogramma geometrico puro ad alto impatto. I leggendari colori Giallorossi vengono ricalibrati digitalmente per schermi e merchandising contemporanei, supportati da una tipografia custom dal taglio monumentale ed aggressivo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 7 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Locandina Mostra">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Poster Design</div>
+                    <h3 class="project-title">Locandina mostra d'arte</h3>
+                    <p class="project-desc">Manifesto culturale d'avanguardia basato sulla decostruzione spaziale. Il design rompe le regole tipografiche classiche lavorando su contrasti estremi in bianco e nero. L'inserimento controllato di texture digitali grezze e sovrapposizioni asimmetriche genera una forte tensione visiva che aggancia all'istante lo sguardo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 8 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Poster Butterfly">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Illustration & Poster Design</div>
+                    <h3 class="project-title">Poster Butterfly</h3>
+                    <p class="project-desc">Una celebrazione geometrica della simmetria biologica reinterpretata in chiave tecnologica. L'illustrazione principale fonde tracciati organici a sottili griglie vettoriali di impostazione cyber-punk. Il contrasto drammatico tra lo sfondo scuro e gli accenti neon blu e viola genera una straordinaria vibrazione visiva.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 9 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Carnevale di Venezia">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Advertising & Event Branding</div>
+                    <h3 class="project-title">Carnevale di Venezia</h3>
+                    <p class="project-desc">Campagna pubblicitaria concettuale. Il visual fonde il mistero secolare della maschera classica con elementi espressivi digitali e glitch-art. La palette cromatica profonda, spezzata da bagliori viola al neon, reinterpreta la tradizione veneziana con un linguaggio visivo tagliente, ipnotico e fortemente contemporaneo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 10 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Noi Siamo Domani">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Social Advertising</div>
+                    <h3 class="project-title">Progetto "Noi Siamo Domani"</h3>
+                    <p class="project-desc">Campagna di comunicazione sociale ad altissimo impatto emotivo. Il layout è scandito da una tipografia bold extra-black che taglia lo spazio visivo diagonalmente, ancorandosi a scatti fotografici in bianco e nero ad alto contrasto. Un design focalizzato sul senso di urgenza e sul dinamismo giovanile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 11 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="Progetto Scarpa">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Advertising & Packaging</div>
+                    <h3 class="project-title">Progetto Scarpa</h3>
+                    <p class="project-desc">Concept commerciale per calzature sportive ingegneristiche. La composizione visiva sfrutta direttrici di forza diagonali e fasci di luce radente per accentuare l'aerodinamicità strutturale del prodotto. L'impaginazione evoca i dettagli tecnici delle interfacce software di progettazione, unendo moda e tech.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGETTO 12 -->
+        <div class="project-card">
+            <div class="project-wrapper">
+                <div class="project-media">
+                    <img class="project-img" src="portfolio samuele/00_OVERVIEW_tracklist.jpg" alt="3 Chicchi">
+                </div>
+                <div class="project-info">
+                    <div class="project-category">Packaging & Brand Identity</div>
+                    <h3 class="project-title">3 Chicchi</h3>
+                    <p class="project-desc">Identità di packaging per una linea di caffè biologico artigianale di alta gamma. Il brand fa leva su eleganti pattern geometrici minimalisti per differenziare le origini geografiche dei chicchi. L'estetica globale trasmette artigianalità e lusso ecocompatibile tramite scelte cartotecniche e tipografiche chiare e raffinate.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- CORE SKILLS SECTIONS -->
+    <section class="skills">
+        <div class="section-title">Competenze Tecniche e Creative</div>
+        <div class="skills-grid">
+            <div class="skill-item"><h3>Graphic Design</h3></div>
+            <div class="skill-item"><h3>Brand Identity</h3></div>
+            <div class="skill-item"><h3>Advertising</h3></div>
+            <div class="skill-item"><h3>Impaginazione</h3></div>
+            <div class="skill-item"><h3>Adobe Illustrator</h3></div>
+            <div class="skill-item"><h3>Adobe Photoshop</h3></div>
+            <div class="skill-item"><h3>Comunicazione Visiva</h3></div>
+            <div class="skill-item"><h3>Progettazione Grafica</h3></div>
+            <div class="skill-item"><h3>Visual Storytelling</h3></div>
+        </div>
+    </section>
+
+    <!-- CONCLUSION FOOTER SECTIONS -->
+    <section class="conclusion">
+        <p class="conclusion-text">
+            "Ogni progetto rappresenta un passo nel mio percorso di crescita professionale e creativa. Questo portfolio racconta il mio modo di osservare, progettare e comunicare attraverso il linguaggio della grafica."
+        </p>
+        <footer>
+            <div>&copy; 2026 Samuele Domenichini — Progetto Esame Esclusivo</div>
+            <div>Grafica, Pubblicità e Tecniche della Comunicazione</div>
+        </footer>
+    </section>
+
+    <!-- PREMIUM ANIMATION & INTERSECTION SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.project-card');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const projectObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Animazione singola premium
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                projectObserver.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

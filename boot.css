@@ -1,0 +1,329 @@
+/* ════════════════════════════════════════════════════════════
+   JARVIS CINEMATIC BOOT SEQUENCE V2 — layer di pre-avvio ISOLATO
+   ────────────────────────────────────────────────────────────
+   Flusso:
+     1. LOADING SCREEN esistente (#loader) — invariato.
+     2. STANDBY JARVIS (questo layer appare dopo il loader) con
+        atmosfera "plancia alla deriva": profondità, nebbia, noise,
+        micro-particelle, vignettatura, hum elettronico.
+     3. "JARVIS ACCENDITI" → boot cinematico + messaggio pre-launch.
+     4. Reveal della nebulosa → ingresso nel portfolio (display:none).
+
+   Il layer si rimuove completamente dopo l'avvio: zero costo
+   runtime, nessun impatto su scroll/responsive/preset/FPS/voce.
+════════════════════════════════════════════════════════════ */
+
+#jarvis-standby{
+  position:fixed; inset:0;
+  /* coperchio OPACO sotto il loader (100001) ma sopra TUTTO il portfolio
+     (max ~10050): copre il rendering iniziale dal primo frame, così il
+     portfolio non appare mai prima dell'attivazione di JARVIS. */
+  z-index:99990;
+  /* nero opaco con lieve profondità volumetrica — è il "fade to black" */
+  background:radial-gradient(ellipse at 50% 42%, #050a14 0%, #02050b 46%, #000103 100%);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  overflow:hidden;
+  color:#cfefff;
+  font-family:'Exo 2', sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  opacity:1; pointer-events:auto;     /* sempre opaco: nessuno spoiler del portfolio */
+  transition:opacity 1.1s cubic-bezier(.45,0,.25,1);
+  will-change:opacity;
+}
+/* il loading screen resta SOPRA lo standby finché non implode: la sequenza
+   è loader → nero opaco → JARVIS, senza mai esporre il portfolio (override
+   isolato: boot.css è caricato dopo style.css). */
+#loader{ z-index:100001; }
+
+/* contenuto JARVIS (atmosfera + scritta): invisibile finché il loader non
+   finisce, poi fade-in SUL nero — il coperchio nero non si muove mai. */
+.jsb-stage{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity 1.1s ease .5s;
+  will-change:opacity;
+}
+#jarvis-standby.boot-ready .jsb-stage{ opacity:1; }
+
+/* reveal finale del portfolio (deve vincere su .boot-ready → definito dopo) */
+#jarvis-standby.boot-hidden{ opacity:0; pointer-events:none; }
+#jarvis-standby.boot-removed{ display:none; }
+
+/* ════ ATMOSFERA ════ */
+
+/* nebbia spaziale quasi invisibile, deriva lentissima */
+.jsb-nebula{
+  position:absolute; inset:-15%; z-index:1; pointer-events:none; opacity:.55;
+  background:
+    radial-gradient(38% 30% at 28% 34%, rgba(0,150,200,.10), transparent 70%),
+    radial-gradient(32% 26% at 74% 64%, rgba(60,40,120,.10), transparent 72%),
+    radial-gradient(46% 38% at 58% 22%, rgba(0,90,130,.07), transparent 75%);
+  filter:blur(8px);
+  animation:jsb-fog 60s ease-in-out infinite alternate;
+  animation-play-state:paused;
+}
+@keyframes jsb-fog{
+  0%  { transform:translate3d(-2%,-1%,0) scale(1.02); }
+  100%{ transform:translate3d(2%,1.5%,0)  scale(1.07); }
+}
+
+/* rumore digitale minimale */
+.jsb-noise{
+  position:absolute; inset:0; z-index:2; pointer-events:none; opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+  animation:jsb-grain .9s steps(2,end) infinite;
+  animation-play-state:paused;
+  mix-blend-mode:screen;
+}
+@keyframes jsb-grain{
+  0%{ background-position:0 0; } 50%{ background-position:-80px 40px; } 100%{ background-position:60px -60px; }
+}
+
+/* micro particelle lentissime (popolate da boot.js) */
+.jsb-particles{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+.jsb-particle{
+  position:absolute; border-radius:50%;
+  background:rgba(180,235,255,.85);
+  box-shadow:0 0 4px rgba(120,220,255,.6);
+  animation:jsb-drift 40s linear infinite;
+  animation-play-state:paused;
+}
+@keyframes jsb-drift{
+  0%  { transform:translate3d(0,0,0); }
+  50% { transform:translate3d(var(--dx,20px), var(--dy,-20px), 0); }
+  100%{ transform:translate3d(0,0,0); }
+}
+
+/* vignettatura leggerissima */
+.jsb-vignette{
+  position:absolute; inset:0; z-index:4; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 48%, transparent 52%, rgba(0,0,0,.55) 100%);
+}
+
+/* avvio atmosfera solo quando lo standby è visibile (risparmio durante il loader) */
+#jarvis-standby.boot-ready .jsb-nebula,
+#jarvis-standby.boot-ready .jsb-noise,
+#jarvis-standby.boot-ready .jsb-particle{ animation-play-state:running; }
+
+/* ════ HUD (griglia, corner, scan, pulse) ════ */
+
+.jsb-grid{
+  position:absolute; inset:0; z-index:5; pointer-events:none; opacity:0;
+  background-image:
+    linear-gradient(rgba(0,242,254,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,242,254,.07) 1px, transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 45%, #000 0%, transparent 72%);
+          mask-image:radial-gradient(ellipse at 50% 45%, #000 0%, transparent 72%);
+  transition:opacity 1.1s ease;
+}
+#jarvis-standby.igniting .jsb-grid{ opacity:1; }
+
+.jsb-corner{
+  position:absolute; z-index:6; width:52px; height:52px;
+  border:1px solid rgba(0,242,254,.55);
+  opacity:0; pointer-events:none;
+  transition:opacity .8s ease .1s;
+}
+.jsb-c-tl{ top:26px; left:26px;  border-right:0; border-bottom:0; }
+.jsb-c-tr{ top:26px; right:26px; border-left:0;  border-bottom:0; }
+.jsb-c-bl{ bottom:26px; left:26px;  border-right:0; border-top:0; }
+.jsb-c-br{ bottom:26px; right:26px; border-left:0;  border-top:0; }
+#jarvis-standby.igniting .jsb-corner{ opacity:1; }
+
+.jsb-scan{
+  position:absolute; left:0; right:0; top:0; height:2px; opacity:0; z-index:7;
+  background:linear-gradient(90deg, transparent, rgba(0,242,254,.75), transparent);
+  box-shadow:0 0 16px 2px rgba(0,242,254,.5);
+  pointer-events:none;
+}
+#jarvis-standby.igniting .jsb-scan{
+  animation:jsb-scan 1.7s cubic-bezier(.5,0,.3,1) .1s 1 forwards;
+}
+@keyframes jsb-scan{
+  0%{ opacity:0; top:-2%; } 8%{ opacity:1; } 92%{ opacity:1; } 100%{ opacity:0; top:102%; }
+}
+
+/* pulse luminoso centrale all'accensione */
+.jsb-pulse{
+  position:absolute; left:50%; top:42%; z-index:6;
+  width:42px; height:42px; margin:-21px 0 0 -21px; border-radius:50%;
+  background:radial-gradient(circle, rgba(0,242,254,.55) 0%, rgba(0,242,254,.18) 40%, transparent 70%);
+  opacity:0; pointer-events:none;
+}
+#jarvis-standby.igniting .jsb-pulse{ animation:jsb-pulse 1.1s cubic-bezier(.2,.7,.3,1) .12s 1 forwards; }
+@keyframes jsb-pulse{
+  0%  { opacity:.9; transform:scale(.2); }
+  60% { opacity:.5; }
+  100%{ opacity:0;  transform:scale(26); }
+}
+
+/* ════ BLOCCO CENTRALE ════ */
+.jsb-core{
+  position:relative; z-index:8; text-align:center;
+  transition:transform 1s ease, opacity 1s ease;
+}
+#jarvis-standby.boot-hidden .jsb-core{ transform:scale(1.06); opacity:0; }
+/* durante il pre-launch il blocco centrale si dissolve per leggibilità */
+#jarvis-standby.prelaunch .jsb-core{ opacity:0; transition:opacity .4s ease; }
+
+.jsb-title{
+  font-family:'Orbitron', sans-serif; font-weight:900;
+  font-size:clamp(2.6rem, 9vw, 6.4rem);
+  letter-spacing:.14em; padding-left:.14em;
+  color:#eafaff;
+  text-shadow:0 0 18px rgba(0,242,254,.45), 0 0 48px rgba(0,242,254,.20);
+  /* breathing lentissimo + micro flicker occasionale (non aggressivo) */
+  animation:jsb-breathe 6s ease-in-out infinite, jsb-microflicker 11s steps(1,end) infinite;
+}
+@keyframes jsb-breathe{
+  0%,100%{ opacity:.82; text-shadow:0 0 16px rgba(0,242,254,.30), 0 0 40px rgba(0,242,254,.13); }
+  50%    { opacity:1;   text-shadow:0 0 28px rgba(0,242,254,.58), 0 0 70px rgba(0,242,254,.28); }
+}
+@keyframes jsb-microflicker{
+  0%,8%,100%{ filter:none; }
+  3%  { filter:brightness(1.35); }
+  4%  { filter:brightness(.7); }
+  5%  { filter:brightness(1.15); }
+  6%  { filter:none; }
+}
+#jarvis-standby.igniting .jsb-title{
+  animation:none; opacity:1;
+  text-shadow:0 0 32px rgba(0,242,254,.75), 0 0 90px rgba(0,242,254,.38);
+  transition:text-shadow 1.4s ease;
+}
+
+.jsb-subtitle{
+  font-family:'JetBrains Mono', monospace;
+  font-size:clamp(.62rem, 1.6vw, .9rem);
+  letter-spacing:.42em; padding-left:.42em;
+  margin-top:1.15rem;
+  color:rgba(0,242,254,.66);
+}
+
+.jsb-status-block{
+  margin-top:1.5rem;
+  display:inline-flex; align-items:center; gap:.85rem;
+  font-family:'JetBrains Mono', monospace;
+  font-size:clamp(.6rem, 1.4vw, .82rem);
+  letter-spacing:.28em; padding-left:.28em;
+}
+.jsb-status-key{ color:rgba(207,239,255,.5); }
+.jsb-status-val{
+  color:#ffb454;
+  text-shadow:0 0 10px rgba(255,180,84,.45);
+  transition:color .5s ease, text-shadow .5s ease;
+}
+.jsb-status-val.online{
+  color:#39ff6e;
+  text-shadow:0 0 14px rgba(57,255,110,.65);
+  animation:jsb-flicker .55s steps(2,end) 1;
+}
+@keyframes jsb-flicker{
+  0%,100%{ opacity:1; } 20%{ opacity:.25; } 40%{ opacity:1; } 60%{ opacity:.5; } 80%{ opacity:1; }
+}
+
+/* ════ BOOT HUD — coordinate + indicatori (comparsa staggered) ════ */
+.jsb-boothud{
+  position:absolute; left:50%; bottom:clamp(2.2rem,9vh,5.4rem);
+  transform:translateX(-50%);
+  z-index:8; width:min(420px,80vw);
+  display:flex; flex-direction:column; gap:.46rem;
+  font-family:'JetBrains Mono', monospace;
+  font-size:clamp(.56rem,1.35vw,.74rem);
+  letter-spacing:.16em;
+  pointer-events:none;
+}
+.jsb-bh-line{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.32rem .7rem;
+  border:1px solid rgba(0,242,254,.14);
+  background:rgba(0,20,30,.28);
+  opacity:0; transform:translateY(8px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+.jsb-bh-k{ color:rgba(207,239,255,.5); }
+.jsb-bh-v{ color:#bfefff; }
+.jsb-bh-v.jsb-ok{ color:#39ff6e; text-shadow:0 0 8px rgba(57,255,110,.4); }
+#jarvis-standby.igniting .jsb-bh-line{
+  opacity:1; transform:translateY(0);
+  transition-delay:calc(.5s + var(--i) * .14s);
+}
+/* il boot hud sparisce con il reveal */
+#jarvis-standby.prelaunch .jsb-boothud{ opacity:0; transition:opacity .5s ease; }
+
+/* ════ GUIDA IN BASSO (standby) ════ */
+.jsb-bottom{
+  position:absolute; left:0; right:0;
+  bottom:clamp(2.4rem, 8vh, 5rem);
+  text-align:center; z-index:8;
+  padding:0 1.5rem;
+  transition:opacity .7s ease;
+}
+#jarvis-standby.igniting .jsb-bottom{ opacity:0; }
+
+.jsb-prompt{
+  font-family:'Exo 2', sans-serif;
+  font-size:clamp(.82rem, 2vw, 1.04rem);
+  letter-spacing:.06em;
+  color:rgba(232,249,255,.85);
+}
+.jsb-command{
+  font-family:'Orbitron', sans-serif; font-weight:700;
+  font-size:clamp(1.15rem, 3.4vw, 1.7rem);
+  letter-spacing:.12em; padding-left:.12em;
+  margin-top:.55rem;
+  color:#ffffff;
+  text-shadow:0 0 16px rgba(0,242,254,.55), 0 0 4px rgba(0,242,254,.4);
+}
+.jsb-ready{
+  font-family:'JetBrains Mono', monospace;
+  font-size:clamp(.6rem, 1.5vw, .78rem);
+  letter-spacing:.3em; padding-left:.3em;
+  margin-top:1.45rem;
+  color:#39ff6e;
+  text-shadow:0 0 10px rgba(57,255,110,.4);
+}
+.jsb-cursor{
+  display:inline-block; margin-left:.25em; color:#39ff6e;
+  animation:jsb-blink 1.05s steps(1,end) infinite;
+}
+@keyframes jsb-blink{ 0%,50%{ opacity:1; } 51%,100%{ opacity:0; } }
+
+/* ════ MESSAGGIO PRE-LAUNCH ════ */
+.jsb-prelaunch{
+  position:absolute; inset:0; z-index:9;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.95rem; pointer-events:none;
+  opacity:0; visibility:hidden;
+  transition:opacity .45s ease, visibility .45s ease;
+}
+#jarvis-standby.prelaunch .jsb-prelaunch{ opacity:1; visibility:visible; }
+.jsb-pl-line{
+  font-family:'JetBrains Mono', monospace; font-weight:500;
+  font-size:clamp(.82rem,2.3vw,1.18rem);
+  letter-spacing:.36em; padding-left:.36em;
+  color:#bfefff; text-shadow:0 0 14px rgba(0,242,254,.45);
+  opacity:0; transform:translateY(10px);
+}
+#jarvis-standby.prelaunch .jsb-pl-line{
+  animation:jsb-plin .5s ease forwards;
+  animation-delay:calc(var(--i) * .16s);
+}
+@keyframes jsb-plin{ to{ opacity:1; transform:translateY(0); } }
+.jsb-pl-welcome{
+  margin-top:.7rem;
+  font-family:'Orbitron', sans-serif; font-weight:700;
+  font-size:clamp(1.2rem,4vw,2rem); letter-spacing:.2em; padding-left:.2em;
+  color:#eafaff; text-shadow:0 0 22px rgba(0,242,254,.7), 0 0 60px rgba(0,242,254,.3);
+}
+
+/* ════ ACCESSIBILITÀ ════ */
+@media (prefers-reduced-motion:reduce){
+  .jsb-title{ animation:none; }
+  .jsb-scan, .jsb-noise, .jsb-particles, .jsb-pulse{ display:none; }
+  .jsb-nebula{ animation:none; }
+  .jsb-cursor{ animation:none; }
+}

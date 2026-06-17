@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>PELLEGRINO FRANCESCO — Portfolio di Maturità</title>
+  <link rel="preload" as="image" href="./frames/frame_000.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,500&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="boot.css" />
+</head>
+<body>
+
+  <!-- ════ JARVIS CINEMATIC BOOT SEQUENCE V2 — layer di pre-avvio (isolato) ════ -->
+  <!-- #jarvis-standby = coperchio nero OPACO sempre presente (no portfolio flash);
+       .jsb-stage = contenuto JARVIS che fa fade-in sul nero dopo il loader -->
+  <div id="jarvis-standby" role="presentation">
+    <div class="jsb-stage">
+      <!-- atmosfera: plancia alla deriva (spenta ma viva) -->
+      <div class="jsb-nebula"></div>
+      <div class="jsb-noise"></div>
+      <div class="jsb-particles"></div>
+      <div class="jsb-vignette"></div>
+
+      <!-- HUD di accensione -->
+      <div class="jsb-grid"></div>
+      <div class="jsb-corner jsb-c-tl"></div><div class="jsb-corner jsb-c-tr"></div>
+      <div class="jsb-corner jsb-c-bl"></div><div class="jsb-corner jsb-c-br"></div>
+      <div class="jsb-scan"></div>
+      <div class="jsb-pulse"></div>
+
+      <!-- blocco centrale -->
+      <div class="jsb-core">
+        <div class="jsb-title">J.A.R.V.I.S.</div>
+        <div class="jsb-subtitle">INTERFACCIA DI BORDO</div>
+        <div class="jsb-status-block">
+          <span class="jsb-status-key">STATO SISTEMA</span>
+          <span class="jsb-status-val" id="jsb-status">STANDBY</span>
+        </div>
+      </div>
+
+      <!-- boot HUD: coordinate + indicatori di sistema (comparsa progressiva) -->
+      <div class="jsb-boothud" aria-hidden="true">
+        <div class="jsb-bh-line" style="--i:0"><span class="jsb-bh-k">COORDINATES</span><span class="jsb-bh-v">41.8°N · 12.5°E</span></div>
+        <div class="jsb-bh-line" style="--i:1"><span class="jsb-bh-k">SECTOR</span><span class="jsb-bh-v">ADRIAN — TAU CETI</span></div>
+        <div class="jsb-bh-line" style="--i:2"><span class="jsb-bh-k">REACTOR</span><span class="jsb-bh-v jsb-ok">ONLINE</span></div>
+        <div class="jsb-bh-line" style="--i:3"><span class="jsb-bh-k">SIGNAL</span><span class="jsb-bh-v jsb-ok">LOCKED</span></div>
+        <div class="jsb-bh-line" style="--i:4"><span class="jsb-bh-k">NAVIGATION</span><span class="jsb-bh-v jsb-ok">SYNC</span></div>
+        <div class="jsb-bh-line" style="--i:5"><span class="jsb-bh-k">VOICE CONTROL</span><span class="jsb-bh-v jsb-ok">ACTIVE</span></div>
+      </div>
+
+      <!-- guida standby -->
+      <div class="jsb-bottom">
+        <div class="jsb-prompt">Per iniziare l'esperienza pronunciare</div>
+        <div class="jsb-command">"JARVIS ACCENDITI"</div>
+        <div class="jsb-ready">VOICE CONTROL READY<span class="jsb-cursor">▮</span></div>
+      </div>
+
+      <!-- messaggio pre-launch -->
+      <div class="jsb-prelaunch" aria-hidden="true">
+        <div class="jsb-pl-line" style="--i:0">SYSTEMS ONLINE</div>
+        <div class="jsb-pl-line" style="--i:1">VOICE CONTROL ACTIVE</div>
+        <div class="jsb-pl-line" style="--i:2">MISSION STATUS READY</div>
+        <div class="jsb-pl-line jsb-pl-welcome" style="--i:3">WELCOME ABOARD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ CURSORE ASTRONAVE ════ -->
+  <div id="cursor">
+    <svg class="cursor-ship" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 24" width="28" height="34">
+      <polygon class="ship-hull"   points="10,0 15,16 10,13 5,16"  fill="#00f2fe"/>
+      <polygon class="ship-wing-l" points="9,8 0,20 6,14"          fill="#007ba8" opacity="0.90"/>
+      <polygon class="ship-wing-r" points="11,8 20,20 14,14"       fill="#007ba8" opacity="0.90"/>
+      <ellipse cx="10" cy="17" rx="3" ry="1.5" fill="rgba(0,180,210,0.35)"/>
+      <ellipse class="ship-engine" cx="10" cy="18.5" rx="2.2" ry="1.5" fill="rgba(255,130,0,0.85)"/>
+      <ellipse class="ship-cockpit" cx="10" cy="5.5" rx="2.5" ry="3" fill="rgba(150,230,255,0.50)"/>
+      <ellipse cx="9.3" cy="4.5" rx="0.7" ry="1.1" fill="rgba(255,255,255,0.35)"/>
+    </svg>
+    <div class="cursor-thrust"></div>
+  </div>
+
+  <!-- ════ MISSION STATUS — telemetria pura, nessuna azione ════ -->
+  <div id="exam-btn" role="status" aria-live="off">
+    <span id="exam-icon">◉</span>
+    <span id="exam-label">MISSION STATUS — ONLINE</span>
+  </div>
+
+  <!-- ════ JARVIS SETTINGS — GRAPHICS PROFILE ════ -->
+  <div id="gfx-settings">
+    <button id="gfx-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="gfx-panel">
+      <span class="gfx-gear">⚙</span> GFX
+    </button>
+    <div id="gfx-panel" role="group" aria-label="JARVIS SETTINGS — GRAPHICS PROFILE">
+      <div class="gfx-header">◈ JARVIS SETTINGS</div>
+      <div class="gfx-sub">GRAPHICS PROFILE</div>
+      <div class="gfx-options">
+        <button class="gfx-opt" data-gfx-opt="ultra"  role="menuitemradio" aria-checked="false">ULTRA<span class="gfx-note">desktop · qualità max</span></button>
+        <button class="gfx-opt" data-gfx-opt="laptop" role="menuitemradio" aria-checked="false">LAPTOP<span class="gfx-note">presentazione · GPU leggera</span></button>
+      </div>
+      <div class="gfx-footer"><span id="gfx-active-label">ACTIVE: —</span></div>
+    </div>
+  </div>
+
+
+  <!-- ════ LOADER — VisionOS cinematic startup ════ -->
+  <div id="loader">
+    <div class="ld-env">
+      <div class="ld-glow ld-glow-core"></div>
+      <div class="ld-glow ld-glow-floor"></div>
+    </div>
+    <div class="ld-body">
+      <div class="ld-corner ld-tl"></div><div class="ld-corner ld-tr"></div>
+      <div class="ld-corner ld-bl"></div><div class="ld-corner ld-br"></div>
+      <div class="ld-logo">
+        <div class="ld-logo-main">HM <span class="ld-logo-sep">://</span> SYS</div>
+        <div class="ld-logo-sub">PORTFOLIO ACCESS NODE — v3.0.0</div>
+      </div>
+      <div class="ld-divider"></div>
+      <div id="ld-message" class="ld-message">INITIALIZING SYSTEM...</div>
+      <div class="ld-bar-wrapper">
+        <div class="ld-bar-labels"><span>LOADING SEQUENCE</span><span id="ld-pct">0%</span></div>
+        <div class="ld-track"><div id="ld-bar"></div><div class="ld-track-glow"></div></div>
+        <div class="ld-segments"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="ld-metrics">
+        <div class="ld-metric"><span class="ld-m-key">NODE</span><span class="ld-m-val">CARLO_URBANI_01</span></div>
+        <div class="ld-metric"><span class="ld-m-key">USER</span><span class="ld-m-val">PELLEGRINO_F</span></div>
+        <div class="ld-metric"><span class="ld-m-key">CLEARANCE</span><span class="ld-m-val ld-m-green">ALPHA ▮</span></div>
+        <div class="ld-metric"><span class="ld-m-key">YEAR</span><span class="ld-m-val">2025 / 2026</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ CANVAS ════ -->
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="starfield-canvas"></canvas>
+  <canvas id="particle-canvas"></canvas>
+
+
+  <!-- ════ VOICE COMMANDS REFERENCE PANEL ════ -->
+  <div id="voice-commands-panel">
+    <div class="vcp-header">◈ VOICE CTRL — COMMAND REFERENCE</div>
+    <div class="vcp-list">
+      <div class="vcp-section">COMANDI ESSENZIALI</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS ACCENDITI</span><span class="vcp-arrow">→</span>Avvia il sistema</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS PROCEDI</span><span class="vcp-arrow">→</span>Sezione successiva</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS INDIETRO</span><span class="vcp-arrow">→</span>Sezione precedente</div>
+      <div class="vcp-section">COMANDI AVANZATI</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS PRESENTATI</span><span class="vcp-arrow">→</span>Avatar olografico</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS CHI È ROCKY?</span><span class="vcp-arrow">→</span>Traduzione eridiana</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS MOSTRA PROGETTI</span><span class="vcp-arrow">→</span>Naviga ai layout</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS APRI PROGETTO [1-4]</span><span class="vcp-arrow">→</span>Apre il mission file</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS MOSTRA VISIONE</span><span class="vcp-arrow">→</span>Naviga a concept</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS MOSTRA STRUTTURA</span><span class="vcp-arrow">→</span>Naviga a codici</div>
+      <div class="vcp-cmd"><span class="vcp-key">JARVIS CHIUDI</span><span class="vcp-arrow">→</span>Ripristina interfaccia</div>
+      <div class="vcp-cmd vcp-danger"><span class="vcp-key">JARVIS AUTODISTRUZIONE</span><span class="vcp-arrow">→</span>Fine trasmissione</div>
+    </div>
+    <div class="vcp-footer">prefisso "JARVIS …" sempre richiesto</div>
+  </div>
+
+  <!-- ════ MELTDOWN WARNING (Phase 1) ════ -->
+  <div id="hud-meltdown-warning">[!] WARNING: CORE MELTDOWN IMMINENT — EVACUATE SYSTEM</div>
+
+  <!-- ════ AUTODESTRUCTION OVERLAYS ════ -->
+  <div id="autodestruct-red"></div>
+  <div id="hologram-final">
+    <div id="hologram-text">
+      <span class="holo-line holo-main">MISSION COMPLETED</span>
+      <span class="holo-line holo-name">PELLEGRINO FRANCESCO</span>
+      <span class="holo-line holo-sub">ESAME DI STATO 2026</span>
+      <span class="holo-line holo-end">FINE TRASMISSIONE</span>
+    </div>
+  </div>
+
+  <!-- ════ DECRYPT SEQUENCE — apertura progetti ════ -->
+  <div id="decrypt-overlay" aria-hidden="true">
+    <div class="dcy-box">
+      <div class="dcy-corner dcy-tl"></div><div class="dcy-corner dcy-tr"></div>
+      <div class="dcy-corner dcy-bl"></div><div class="dcy-corner dcy-br"></div>
+      <div class="dcy-line" id="dcy-l1">▸ DECRYPTING FILE<span class="dcy-cursor">▮</span></div>
+      <div class="dcy-line" id="dcy-l2">▸ VERIFYING ACCESS<span class="dcy-cursor">▮</span></div>
+      <div class="dcy-line dcy-granted" id="dcy-l3">◉ ACCESS GRANTED</div>
+      <div class="dcy-track"><div class="dcy-bar" id="dcy-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- ════ JARVIS — AVATAR OLOGRAFICO ════ -->
+  <div id="jarvis-avatar" aria-hidden="true">
+    <div class="jv-stage">
+      <canvas id="jv-holo"></canvas>
+      <div class="jv-caption">J.A.R.V.I.S</div>
+      <div class="jv-sub">INTERFACCIA VIRTUALE DI BORDO — CREW MEMBER 02</div>
+      <div class="jv-base"></div>
+    </div>
+  </div>
+
+  <!-- ════ ROCKY — TRADUZIONE LINGUAGGIO ERIDIANO ════ -->
+  <div id="rocky-overlay" aria-hidden="true">
+    <div class="rk-box">
+      <div class="rk-header">◈ ERIDIAN LANGUAGE TRANSLATION — 40 ERIDANI A</div>
+      <canvas id="rk-wave"></canvas>
+      <div class="rk-lines">
+        <div class="rk-line"><span class="rk-erid">♩♪♫ ♪♩ ♫♪♩</span><span class="rk-arrow">→</span><span class="rk-it" data-text="ROCKY — INGEGNERE ERIDIANO, NAVE BLIP-A"></span></div>
+        <div class="rk-line"><span class="rk-erid">♫♩ ♪♫♪ ♩♩</span><span class="rk-arrow">→</span><span class="rk-it" data-text="IL MIGLIOR COMPAGNO DI MISSIONE DELL'UNIVERSO"></span></div>
+        <div class="rk-line"><span class="rk-erid">♪♪♫ !</span><span class="rk-arrow">→</span><span class="rk-it" data-text="«AMAZE, AMAZE, AMAZE!»"></span></div>
+      </div>
+      <div class="rk-footer">PROJECT HAIL MARY — TRIBUTE PROTOCOL // SALE AGLI OCCHI, DOMANDA</div>
+    </div>
+  </div>
+
+  <!-- ════ OVERLAYS ════ -->
+  <div class="overlay-scanlines"></div>
+  <div class="overlay-vignette"></div>
+  <div class="overlay-chroma"></div>
+
+  <!-- ════ EARTH ANCHOR LOCK — anti-watermark cover ════ -->
+  <div id="earth-cover">
+    <div id="earth-sphere"></div>
+    <svg id="hud-ring" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220"></svg>
+    <svg id="ship-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20">
+      <path d="M10,2 L14,13 L10,11 L6,13 Z" fill="#00f2fe"/>
+      <path d="M9,8 L2,17 L7,12 Z" fill="#0099cc" opacity="0.78"/>
+      <path d="M11,8 L18,17 L13,12 Z" fill="#0099cc" opacity="0.78"/>
+      <ellipse cx="10" cy="14" rx="2.5" ry="1.5" fill="rgba(255,150,0,0.70)"/>
+      <circle cx="10" cy="5" r="1.5" fill="rgba(180,240,255,0.45)"/>
+    </svg>
+  </div>
+
+  <!-- ════ VIEWPORT HUD PERIMETER FRAME (cockpit oblò) ════ -->
+  <div id="vp-frame">
+    <div class="vp-corner vp-tl"></div>
+    <div class="vp-corner vp-tr"></div>
+    <div class="vp-corner vp-bl"></div>
+    <div class="vp-corner vp-br"></div>
+  </div>
+
+  <!-- ════ LIVE TELEMETRY — computer di bordo ════ -->
+  <aside id="telemetry-panel" aria-hidden="true">
+    <div class="tlm-header">◈ LIVE TELEMETRY</div>
+    <div class="tlm-row"><span class="tlm-key">SIGNAL STRENGTH</span><span class="tlm-val" data-tlm="signal">98.2%</span><div class="tlm-bar"><div class="tlm-fill" data-fill="signal"></div></div></div>
+    <div class="tlm-row"><span class="tlm-key">VOICE LINK</span><span class="tlm-val" data-tlm="voice">STANDBY</span></div>
+    <div class="tlm-row"><span class="tlm-key">MISSION STATUS</span><span class="tlm-val" data-tlm="mission">PHASE 01</span></div>
+    <div class="tlm-row"><span class="tlm-key">REACTOR STATUS</span><span class="tlm-val" data-tlm="reactor">94.1%</span><div class="tlm-bar"><div class="tlm-fill" data-fill="reactor"></div></div></div>
+    <div class="tlm-row"><span class="tlm-key">COMMUNICATION</span><span class="tlm-val" data-tlm="comms">1.24 Mb/s</span></div>
+    <div class="tlm-row"><span class="tlm-key">NAVIGATION</span><span class="tlm-val" data-tlm="nav">HDG 118.4°</span></div>
+    <div class="tlm-row"><span class="tlm-key">SYSTEM HEALTH</span><span class="tlm-val tlm-ok" data-tlm="health">NOMINAL</span></div>
+  </aside>
+
+  <!-- ════ HUD BARS ════ -->
+  <div class="hud-topbar">
+    <span>HM://PORTFOLIO_v3.0</span>
+    <span id="hud-time">00:00:00</span>
+    <span>STATUS: ONLINE</span>
+  </div>
+  <div class="hud-bottombar">
+    <span>LAT: 41.8°N</span>
+    <span>LON: 12.5°E</span>
+    <span>ALT: ∞ AU</span>
+    <span id="voice-status">JARVIS_SYSTEM: SLEEP_MODE [PRONUNCIA: JARVIS ACCENDITI]</span>
+  </div>
+
+  <!-- ════════════════════════════════════
+       SEZIONE 1 — INTRO
+  ════════════════════════════════════ -->
+  <section id="intro" class="section-panel">
+    <div class="hud-frame">
+      <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+      <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+      <div class="mission-label">◈ MISSIONE ALFA — ARCHIVIO PERSONALE ◈</div>
+      <h1 id="scramble-name" class="hero-name" aria-label="PELLEGRINO FRANCESCO"></h1>
+      <div class="divider-line"></div>
+      <p id="scramble-school" class="hero-school" aria-label="IIS CARLO URBANI — GRAFICA PUBBLICITARIA"></p>
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-text">SISTEMA OPERATIVO — A.S. 2025/2026</span>
+        <span class="status-sep">|</span>
+        <span class="status-text">ESAME DI STATO</span>
+      </div>
+      <nav class="hud-nav">
+        <a href="#chi-sono"  class="nav-btn"><span class="nav-num">01</span>CHI SONO</a>
+        <a href="#progetti"  class="nav-btn"><span class="nav-num">02</span>PROGETTI</a>
+        <a href="#sinergia"  class="nav-btn"><span class="nav-num">03</span>SINERGIA</a>
+        <a href="#black-box" class="nav-btn"><span class="nav-num">04</span>BLACK BOX</a>
+      </nav>
+      <div class="scroll-hint"><span>SCORRI PER INIZIARE LA MISSIONE</span><div class="scroll-arrow">▼</div></div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SEZIONE 2 — CHI SONO
+  ════════════════════════════════════ -->
+  <section id="chi-sono" class="section-panel">
+    <div class="hud-frame hud-frame--right fade-in-section">
+      <div class="hud-corner hud-corner--red tl"></div><div class="hud-corner hud-corner--red tr"></div>
+      <div class="hud-corner hud-corner--red bl"></div><div class="hud-corner hud-corner--red br"></div>
+      <div class="section-tag">// 01 — IDENTITÀ</div>
+      <h2 class="section-title section-title--red">CHI SONO</h2>
+      <div class="divider-line divider-line--short divider-line--red"></div>
+      <div class="bio-text">
+        <p>Studente di <span class="hi-cyan">Grafica Pubblicitaria</span> presso <span class="hi-red">IIS Carlo Urbani</span>. Cinque anni di formazione tra comunicazione visiva, tipografia, fotografia e design digitale.</p>
+        <p>Accanto alla formazione grafica lavoro nel settore della <span class="hi-cyan">sicurezza elettronica</span>, occupandomi di sistemi antintrusione e videosorveglianza — tecnologie per la protezione degli ambienti — che traduco, attraverso la grafica, in un linguaggio capace di comunicare tra tecnologia e persone. A questo affianco l'interesse per l'Intelligenza Artificiale come strumento creativo.</p>
+        <p>Questo portfolio è il resoconto finale di un percorso di crescita creativa e tecnica.</p>
+      </div>
+      <div class="data-readout">
+        <div class="data-row"><span class="data-label">NOME</span><span class="data-val">PELLEGRINO FRANCESCO</span></div>
+        <div class="data-row"><span class="data-label">ISTITUTO</span><span class="data-val">IIS CARLO URBANI</span></div>
+        <div class="data-row"><span class="data-label">INDIRIZZO</span><span class="data-val">GRAFICA PUBBLICITARIA</span></div>
+        <div class="data-row"><span class="data-label">ANNO</span><span class="data-val">2025 / 2026</span></div>
+        <div class="data-row"><span class="data-label">CLASSE</span><span class="data-val">V ANNO</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SEZIONE 3 — PROGETTI GRAFICI
+  ════════════════════════════════════ -->
+  <section id="progetti" class="section-panel section-panel--projects">
+    <div class="projects-wrapper fade-in-section">
+      <div class="section-tag">// 02 — ARCHIVIO VISIVO</div>
+      <h2 class="section-title">PROGETTI GRAFICI</h2>
+      <div class="divider-line divider-line--short"></div>
+      <p class="projects-sub">Seleziona un file di missione per aprirlo</p>
+      <div id="projects-grid" class="projects-grid"></div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SEZIONE 4 — SINERGIA CIBERNETICA
+  ════════════════════════════════════ -->
+  <section id="sinergia" class="section-panel section-panel--sinergia">
+    <div class="hud-frame hud-frame--sinergia fade-in-section">
+      <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+      <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+      <div class="section-tag">// 03 — SINERGIA CIBERNETICA</div>
+      <h2 class="section-title">VISIONE &amp; PROFILO</h2>
+      <div class="divider-line divider-line--short"></div>
+
+      <div class="sin-blocks">
+        <div class="sin-block">
+          <div class="sin-block-label">◈ PROFILO</div>
+          <p>Grafico Pubblicitario attivo nel settore della <span class="hi-cyan">sicurezza elettronica</span> — sistemi antintrusione, videosorveglianza e protezione degli ambienti — con un interesse parallelo per l'<span class="hi-red">Intelligenza Artificiale</span>. Cinque anni di IIS Carlo Urbani hanno costruito una base tecnica solida: dal processo di stampa offset alla composizione digitale, dalla fotografia al motion design.</p>
+        </div>
+        <div class="sin-block">
+          <div class="sin-block-label">◈ MANIFESTO AI</div>
+          <p>L'intelligenza artificiale non è la fine delle competenze umane: è il loro <span class="hi-cyan">moltiplicatore</span>. Come il copilota di un'astronave non sostituisce l'astronauta ma estende le sue capacità, l'AI amplifica la visione del grafico permettendogli di risolvere problemi impossibili con strumenti nuovi.</p>
+          <p>Usare l'AI consapevolmente è una competenza, non una scorciatoia. Rocky non ha eliminato Grace — lo ha reso più efficace.</p>
+        </div>
+        <div class="sin-block">
+          <div class="sin-block-label">◈ CONNESSIONE CON ROCKY</div>
+          <p>Come <span class="hi-cyan">Rocky</span> comunicava con Ryland Grace attraverso frequenze e pattern luminosi, il grafico pubblicitario traduce ogni messaggio in un linguaggio visivo universale. Ogni progetto è una trasmissione: bisogna assicurarsi che arrivi.</p>
+        </div>
+      </div>
+
+      <!-- Rocky Translator -->
+          <div class="rocky-widget">
+            <div class="rocky-widget-header">
+              <div class="rocky-widget-title">TRADUTTORE REQUISITI ROCKY</div>
+              <div class="rocky-widget-sub">Sintonizza la frequenza — o clicca un segnale</div>
+            </div>
+            <div class="rocky-tuner">
+              <div class="rocky-freq-label">◈ FREQ TUNER — DRAG KNOB TO DECODE</div>
+              <div class="rocky-knob-layout">
+                <div class="rocky-knob-wrap" id="rocky-knob-wrap" title="Drag to tune">
+                  <svg class="rocky-knob-svg" viewBox="0 0 100 100" id="rocky-knob-svg">
+                    <circle cx="50" cy="50" r="46" fill="rgba(0,3,12,0.94)" stroke="rgba(29,212,212,0.22)" stroke-width="1.5"/>
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(29,212,212,0.07)" stroke-width="5"/>
+                    <path id="knob-active-arc" fill="none" stroke="#1dd4d4" stroke-width="5" stroke-linecap="round"
+                      d="M 31 82.9 A 38 38 0 1 1 69 82.9"
+                      stroke-dasharray="0 202"/>
+                    <g id="knob-ticks" stroke="rgba(29,212,212,0.30)" stroke-width="1.2"></g>
+                    <g id="knob-needle-group" transform="rotate(0,50,50)">
+                      <line x1="50" y1="50" x2="50" y2="19" stroke="#1dd4d4" stroke-width="2.8" stroke-linecap="round"/>
+                      <circle cx="50" cy="19" r="3.2" fill="#1dd4d4"/>
+                    </g>
+                    <circle cx="50" cy="50" r="10" fill="rgba(0,3,12,0.98)" stroke="rgba(29,212,212,0.45)" stroke-width="1.5"/>
+                    <circle cx="50" cy="50" r="4" fill="#1dd4d4"/>
+                    <text id="knob-val-text" class="knob-val-text" x="50" y="72">50.0</text>
+                  </svg>
+                </div>
+                <div class="rocky-knob-meta">
+                  <div class="rocky-knob-val-line">
+                    <span class="rocky-freq-val" id="rocky-freq-display">50.0</span>
+                    <span class="rocky-freq-unit">MHz</span>
+                  </div>
+                  <div class="rocky-decode-status" id="rocky-decode-status">— SCANNING FREQUENCIES —</div>
+                </div>
+              </div>
+              <input type="range" id="rocky-freq-slider" class="rocky-slider-hidden" min="0" max="100" value="50" step="0.5">
+            </div>
+            <div class="rocky-display">
+              <canvas id="rocky-wave"></canvas>
+              <div id="rocky-msg" class="rocky-msg"></div>
+            </div>
+            <div class="rocky-signals">
+              <button class="rocky-signal" data-index="0">◈ CINEMA SCI-FI</button>
+              <button class="rocky-signal" data-index="1">◈ MOTION DESIGN</button>
+              <button class="rocky-signal" data-index="2">◈ ASTRONOMIA</button>
+              <button class="rocky-signal" data-index="3">◈ SICUREZZA ELETTRONICA</button>
+              <button class="rocky-signal" data-index="4">◈ TIPOGRAFIA</button>
+              <button class="rocky-signal" data-index="5">◈ AI / PROMPT ENG.</button>
+            </div>
+            <div id="rocky-detail" class="rocky-detail"></div>
+      </div>
+
+      <!-- Rete neurale interattiva — contenuto secondario sotto il testo -->
+      <div class="neural-panel">
+        <div class="neural-label">RETE DI COMPETENZE — hover su un nodo per illuminare le relazioni</div>
+        <canvas id="neural-canvas"></canvas>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       SEZIONE 5 — BLACK BOX
+  ════════════════════════════════════ -->
+  <section id="black-box" class="section-panel section-panel--blackbox">
+    <div class="blackbox-wrapper fade-in-section">
+      <div class="section-tag">// 04 — BLACK BOX / REVERSE ENGINEERING</div>
+      <h2 class="section-title">ARCHIVIO DI PROCESSO</h2>
+      <div class="divider-line divider-line--short"></div>
+
+      <!-- Tab bar -->
+      <div class="tab-bar" role="tablist">
+        <button class="tab-btn active" data-tab="genesi"  role="tab" aria-selected="true">[ GENESI VISIVA ]</button>
+        <button class="tab-btn"        data-tab="prompt"  role="tab" aria-selected="false">[ DIARIO PROMPT ]</button>
+        <button class="tab-btn"        data-tab="codice"  role="tab" aria-selected="false">[ STRUTTURA CODICE ]</button>
+      </div>
+
+      <!-- Tab 1 — Genesi Visiva -->
+      <div class="tab-content" id="tab-genesi" role="tabpanel">
+        <div class="tab-inner">
+          <div class="tab-section-title">CONCEPT: PROJECT HAIL MARY COME METAFORA GRAFICA</div>
+          <p class="tab-text">Come Ryland Grace si sveglia senza memoria ma con le competenze intatte, ogni brief grafico richiede di ripartire da zero costruendo senso dal caos visivo. L'astronauta non sa perché è lì — il grafico non sa ancora cosa il cliente vuole davvero. Entrambi devono <span class="hi-cyan">decodificare il problema</span> prima di poterlo risolvere.</p>
+          <div class="tab-divider"></div>
+          <div class="tab-section-title">LOGICA DELL'ANIMAZIONE — 192 FRAME</div>
+          <div class="tab-code-block">
+<span class="tok-comment">// Struttura narrativa dei frame (viaggio al contrario)</span>
+<span class="tok-key">Frame 001</span> → <span class="tok-string">"PORTFOLIO"</span>    <span class="tok-comment">// Landing: il risultato finale (sciame rosso)</span>
+<span class="tok-key">Frame ~064</span> → <span class="tok-string">Invasione rossa</span> <span class="tok-comment">// Gli Astrofagi: il brief difficile</span>
+<span class="tok-key">Frame ~096</span> → <span class="tok-string">Sciame caotico</span> <span class="tok-comment">// Metà scroll: il processo creativo</span>
+<span class="tok-key">Frame 192</span> → <span class="tok-string">Atmosfera verde di Adrian</span> <span class="tok-comment">// Fine scroll: la genesi</span>
+
+<span class="tok-comment">// La sequenza è esportata già al contrario: il visitatore rivive
+// il viaggio dall'obiettivo alla genesi, dal risultato alla radice.</span></div>
+          <p class="tab-text">Questa scelta non è estetica ma <span class="hi-red">narrativa</span>: il portfolio inizia mostrando il punto di arrivo, poi svela il percorso che ci ha portato lì — esattamente come un esame di maturità.</p>
+        </div>
+      </div>
+
+      <!-- Tab 2 — Diario Prompt -->
+      <div class="tab-content hidden" id="tab-prompt" role="tabpanel">
+        <div class="tab-inner">
+          <div class="tab-section-title">PROMPT ENGINEERING — LOG COMPLETO</div>
+          <p class="tab-text">I prompt usati con i modelli AI durante lo sviluppo del portfolio. L'engineering dei prompt è una competenza grafica: saper descrivere l'output visivo desiderato è come scrivere un brief per un fotografo.</p>
+          <div class="tab-divider"></div>
+          <div class="tab-code-block">
+<span class="tok-comment">// PROMPT #001 — Concept visivo iniziale</span>
+<span class="tok-string">"Crea un sistema di identità visiva per il mio portfolio di maturità
+ispirato al film Project Hail Mary. Estetica: terminale militare NASA,
+sfondo nero profondo, dettagli ciano/teal, elementi rosso-astrofago.
+Font: monospace per dati tecnici, Orbitron per titoli.
+Atmosfera: ingegneria aerospaziale, non cyberpunk neon."</span>
+
+<span class="tok-comment">// PROMPT #002 — Animazione canvas</span>
+<span class="tok-string">"Implementa un sistema canvas HTML5 con scroll-driven animation
+ottimizzato per 60fps. Usa requestAnimationFrame con throttling.
+Supporto devicePixelRatio per display Retina.
+Conteggio frame auto-rilevato dalla cartella:
+frame_001 visibile a top:0, frame_192 a bottom."</span>
+
+<span class="tok-comment">// PROMPT #003 — Sistema particelle</span>
+<span class="tok-string">"Crea un motore di particelle con attrazione gravitazionale al cursore.
+Particelle rosse (Astrofagi) che orbitano il mirino laser.
+Connessioni neurali tra particelle entro 110px.
+Colore si sposta verso il rosso durante lo scroll."</span></div>
+        </div>
+      </div>
+
+      <!-- Tab 3 — Struttura Codice -->
+      <div class="tab-content hidden" id="tab-codice" role="tabpanel">
+        <div class="tab-inner">
+          <div class="tab-section-title">ARCHITETTURA JAVASCRIPT — CANVAS + PARTICELLE</div>
+          <p class="tab-text">Snippet della logica principale: canvas scroll-driven e motore di particelle reattive al mouse.</p>
+          <div class="tab-divider"></div>
+          <div class="tab-code-block">
+<span class="tok-comment">// ── CANVAS SCROLL-DRIVEN (scroll invertito HD) ──────────────</span>
+<span class="tok-key">function</span> <span class="tok-fn">updateBgFrame</span>() {
+  <span class="tok-key">const</span> maxScroll = document.body.scrollHeight - window.innerHeight;
+  <span class="tok-key">const</span> progress  = Math.min(<span class="tok-num">1</span>, window.scrollY / maxScroll);
+
+  <span class="tok-comment">// DIRETTO: progress 0 → frame_001 ("PORTFOLIO" visibile in cima);
+  // frameCount è auto-rilevato dalla cartella ./frames, non hardcoded</span>
+  <span class="tok-key">const</span> target = Math.round(progress * (frameCount - <span class="tok-num">1</span>));
+  <span class="tok-key">if</span> (target !== currentFrame) {
+    currentFrame = target;
+    <span class="tok-fn">renderFrame</span>(currentFrame);
+  }
+}
+
+<span class="tok-comment">// ── GRAVITAZIONE MAGNETICA PARTICELLE ───────────────────────</span>
+<span class="tok-key">function</span> <span class="tok-fn">updateParticle</span>(p, mouse) {
+  <span class="tok-key">const</span> dx = p.x - mouse.x, dy = p.y - mouse.y;
+  <span class="tok-key">const</span> dist = Math.sqrt(dx*dx + dy*dy);
+
+  <span class="tok-key">if</span> (dist < ATTRACT_R && dist > ORBIT_R) {
+    <span class="tok-comment">// zona attrazione: particella risucchiata verso il mirino</span>
+    <span class="tok-key">const</span> f = Math.pow(<span class="tok-num">1</span> - dist/ATTRACT_R, <span class="tok-num">1.6</span>) * ATTRACT_STR;
+    p.vx -= (dx/dist) * f;
+    p.vy -= (dy/dist) * f;
+  } <span class="tok-key">else if</span> (dist <= ORBIT_R) {
+    <span class="tok-comment">// zona orbita: respinta per creare coda circolare</span>
+    <span class="tok-key">const</span> f = (<span class="tok-num">1</span> - dist/ORBIT_R) * <span class="tok-num">2.2</span>;
+    p.vx += (dx/dist) * f;
+    p.vy += (dy/dist) * f;
+  }
+  p.vx *= <span class="tok-num">0.958</span>; p.vy *= <span class="tok-num">0.958</span>; <span class="tok-comment">// attrito</span>
+  p.x  += p.vx;   p.y  += p.vy;
+}</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════ -->
+  <footer id="fine" class="section-panel section-panel--footer">
+    <div class="footer-panel fade-in-section">
+      <div class="ft-corner ft-tl"></div><div class="ft-corner ft-tr"></div>
+      <div class="ft-corner ft-bl"></div><div class="ft-corner ft-br"></div>
+
+      <!-- static noise canvas — cinematic reveal on section enter -->
+      <canvas id="ft-noise" class="ft-noise-canvas"></canvas>
+
+      <div class="ft-topbar">
+        <span class="ft-tag">// END OF TRANSMISSION</span>
+        <div class="footer-signal">
+          <div class="signal-ring"></div><div class="signal-ring"></div><div class="signal-ring"></div>
+          <div class="signal-dot"></div>
+        </div>
+        <span class="ft-status">◉ SIGNAL LOST</span>
+      </div>
+
+      <div class="ft-divider"></div>
+
+      <!-- decrypt bar — sweeps across on entry -->
+      <div class="ft-decrypt-bar" id="ft-decrypt-bar"></div>
+
+      <p class="footer-title">FINE TRASMISSIONE</p>
+
+      <div class="ft-divider ft-divider--rev"></div>
+
+      <div class="ft-meta">
+        <div class="ft-meta-row">
+          <span class="ft-meta-key">OPERATORE</span>
+          <span class="ft-meta-val">PELLEGRINO FRANCESCO</span>
+        </div>
+        <div class="ft-meta-row">
+          <span class="ft-meta-key">ISTITUTO</span>
+          <span class="ft-meta-val">IIS CARLO URBANI</span>
+        </div>
+        <div class="ft-meta-row">
+          <span class="ft-meta-key">INDIRIZZO</span>
+          <span class="ft-meta-val">GRAFICA PUBBLICITARIA</span>
+        </div>
+        <div class="ft-meta-row">
+          <span class="ft-meta-key">ANNO SOLARE</span>
+          <span class="ft-meta-val">2025 / 2026</span>
+        </div>
+        <div class="ft-meta-row">
+          <span class="ft-meta-key">MISSIONE</span>
+          <span class="ft-meta-val">PORTFOLIO DI MATURITÀ — ESAME DI STATO</span>
+        </div>
+      </div>
+
+      <div class="ft-coda">[ ARCHIVIO CHIUSO — SESSIONE TERMINATA — ACCESSO REVOCATO ]</div>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════
+       MODAL — SPLIT SCREEN CINEMA
+  ════════════════════════════════════ -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-panel">
+      <div class="modal-scan-overlay" id="modal-scan"></div>
+      <div class="modal-topbar">
+        <button id="modal-close" class="modal-close-btn">← TORNA ALLA PLANCIA PROGETTI</button>
+        <span id="modal-mission-tag" class="modal-mission-tag">// MISSION FILE — 01</span>
+      </div>
+      <div class="modal-split">
+        <div class="modal-img-col">
+          <div id="modal-image" class="modal-img-container">
+            <div class="modal-img-placeholder">
+              <span class="modal-img-icon">◧</span>
+              <span>IMMAGINE PROGETTO</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-info-col">
+          <div class="info-meta-row">
+            <span id="modal-year" class="info-year">2026</span>
+            <div id="modal-tags-list" class="info-tags"></div>
+          </div>
+          <h2 id="modal-title" class="info-title"></h2>
+          <p  id="modal-subtitle" class="info-subtitle"></p>
+          <div class="info-divider"></div>
+          <div class="info-block">
+            <div class="info-block-label">▸ BRIEF SCOLASTICO</div>
+            <p id="modal-brief" class="info-block-text"></p>
+          </div>
+          <div class="info-block">
+            <div class="info-block-label">▸ OBIETTIVI</div>
+            <ul id="modal-objectives" class="info-block-list"></ul>
+          </div>
+          <div class="info-block">
+            <div class="info-block-label">▸ STRUMENTI</div>
+            <div id="modal-tools" class="info-block-tools"></div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-label">▸ METODO DI REALIZZAZIONE</div>
+            <p id="modal-method" class="info-block-text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="boot.js"></script>
+</body>
+</html>

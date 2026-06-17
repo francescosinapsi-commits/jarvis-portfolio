@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samuele Domenichini — Visual & Music Portfolio</title>
+    <style>
+        /* FONTS & MUSIC THEME VARIABLES */
+        :root {
+            --bg-dark: #070708;
+            --surface-album: #121214;
+            --text-light: #ffffff;
+            --text-dim: #a7a7a7;
+            --accent-vinyl: #ff4500; /* Arancio vibrante ispirato a sfumature di Invisibili */
+            --accent-neon: #00e5ff;
+            --font-track: 'Courier New', Courier, monospace;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
+            letter-spacing: -0.01em;
+        }
+
+        /* NAVIGATION */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(7,7,8,0.9), rgba(7,7,8,0));
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .track-meta {
+            font-family: var(--font-track);
+            font-size: 0.8rem;
+            color: var(--accent-vinyl);
+        }
+
+        /* HERO SECTION: MUSIC & VINYL DISPLAY */
+        .hero-music {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: center;
+            padding: 0 8%;
+            position: relative;
+            gap: 40px;
+        }
+
+        @media (min-width: 992px) {
+            .hero-music {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        .hero-details h1 {
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin-bottom: 15px;
+        }
+
+        .hero-details h2 {
+            font-family: var(--font-track);
+            font-size: clamp(0.9rem, 1.5vw, 1.3rem);
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .album-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgba(255, 69, 0, 0.15);
+            border: 1px solid var(--accent-vinyl);
+            color: var(--accent-vinyl);
+            font-size: 0.75rem;
+            font-family: var(--font-track);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-radius: 2px;
+        }
+
+        /* VINYL ANIMATION ENGINE */
+        .player-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .vinyl-wrapper {
+            position: relative;
+            width: clamp(280px, 35vw, 420px);
+            height: clamp(280px, 35vw, 420px);
+        }
+
+        .vinyl-sleeve {
+            width: 95%;
+            height: 95%;
+            background: linear-gradient(135deg, #18181c 0%, #0d0d0f 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: absolute;
+            z-index: 2;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            border-radius: 4px;
+        }
+
+        .sleeve-title {
+            font-family: var(--font-track);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .sleeve-artist {
+            font-size: 0.85rem;
+            color: var(--accent-vinyl);
+            text-transform: uppercase;
+            margin-top: 5px;
+            letter-spacing: 0.1em;
+        }
+
+        .vinyl-disc {
+            position: absolute;
+            top: 2.5%;
+            right: -20px;
+            width: 95%;
+            height: 95%;
+            background: radial-gradient(circle, #000 20%, #111 21%, #000 25%, #111 30%, #000 35%, #111 40%, #000 45%, #111 50%, #000 55%, #111 60%, #000 65%, #111 70%, #000 75%, #111 80%, #050505 81%);
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: spinVinyl 12s linear infinite;
+        }
+
+        .vinyl-label {
+            width: 32%;
+            height: 32%;
+            background-color: #ff4500;
+            background: radial-gradient(circle, #000 10%, #ff4500 11%, #d03400 100%);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #000;
+            padding: 5px;
+        }
+
+        .vinyl-label-text {
+            font-size: 0.45rem;
+            font-weight: 900;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        @keyframes spinVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* TRACKLIST / PROJECTS SECTION */
+        .tracklist-container {
+            padding: 5vh 5% 15vh 5%;
+        }
+
+        .section-header {
+            font-family: var(--font-track);
+            color: var(--accent-vinyl);
+            font-size: 0.9rem;
+            margin-left: 3%;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .project-track {
+            margin: 10vh 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-track.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .track-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .track-grid {
+                grid-template-columns: 1.1fr 1fr;
+            }
+            .project-track:nth-child(even) .track-grid {
+                direction: rtl;
+            }
+            .project-track:nth-child(even) .track-details {
+                direction: ltr;
+                padding-right: 40px;
+            }
+        }
+
+        /* SMART GUARANTEED MEDIA DISPLAY */
+        .track-media-box {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(135deg, #1c1c22 0%, #0f0f12 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Placeholder visibile se la foto non carica */
+        .media-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            color: rgba(255,255,255,0.15);
+            font-family: var(--font-track);
+            text-transform: uppercase;
+        }
+
+        .placeholder-disc {
+            width: 60px;
+            height: 60px;
+            border: 2px dashed rgba(255,255,255,0.1);
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .track-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            transition: transform 1s ease;
+        }
+
+        .track-media-box:hover .track-img {
+            transform: scale(1.03);
+        }
+
+        /* DETAILS */
+        .track-index {
+            font-family: var(--font-track);
+            color: var(--accent-vinyl);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .track-title {
+            font-size: clamp(1.8rem, 2.5vw, 2.8rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+        }
+
+        .track-genre {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--accent-neon);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            font-family: var(--font-track);
+        }
+
+        .track-description {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-dim);
+            text-align: justify;
+        }
+
+        /* AUDIO PROFILE (SKILLS) */
+        .audio-profile {
+            padding: 12vh 8%;
+            background-color: #0b0b0d;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .skills-waveform {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .waveform-node {
+            background-color: var(--surface-album);
+            padding: 25px;
+            border-radius: 4px;
+            border-left: 2px solid var(--accent-vinyl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .waveform-node h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .node-freq {
+            font-family: var(--font-track);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* OUTRO FOOTER */
+        .outro-player {
+            padding: 15vh 8% 8vh 8%;
+            text-align: center;
+            background: linear-gradient(to bottom, #0b0b0d, #030304);
+        }
+
+        .outro-quote {
+            font-size: clamp(1.3rem, 2.5vw, 2.2rem);
+            max-width: 850px;
+            margin: 0 auto 50px auto;
+            line-height: 1.5;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            font-family: var(--font-track);
+        }
+
+        @media (min-width: 768px) {
+            footer {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP HEADER BAR -->
+    <header>
+        <div class="logo">S. Domenichini — LP.01</div>
+        <div class="track-meta">SIDE A // STEREO AUDIO</div>
+    </header>
+
+    <!-- HERO SECTION: INVISIBILI ALBUM INTEGRATION -->
+    <section class="hero-music">
+        <div class="hero-details">
+            <div class="album-badge">Concept Inspired by "Invisibili"</div>
+            <h1>Samuele Domenichini</h1>
+            <h2>Grafica • Pubblicità • Comunicazione Visiva</h2>
+            <p style="color: var(--text-dim); font-size: 1.2rem; line-height: 1.5; max-width: 550px;">
+                Un percorso creativo strutturato come una tracklist visiva: l'unione tra branding, impaginazione editoriale d'avanguardia e puro ritmo geometrico.
+            </p>
+        </div>
+        
+        <div class="player-container">
+            <div class="vinyl-wrapper">
+                <div class="vinyl-sleeve">
+                    <div class="sleeve-title">INVISIBILI</div>
+                    <div class="sleeve-artist">Il Tre // Inspired</div>
+                </div>
+                <div class="vinyl-disc">
+                    <div class="vinyl-label">
+                        <span class="vinyl-label-text" style="margin-bottom:2px;">SAMUELE</span>
+                        <span class="vinyl-label-text" style="font-size:0.35rem; color:#fff;">2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRACKLIST WORKLIST CONTROLLER -->
+    <main class="tracklist-container">
+        <div class="section-header">// SELEZIONE PROGETTI / TRACKLIST DEL CORSO</div>
+
+        <!-- TRACK 01 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 01 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/sacred_oasis.jpg" alt="Sacred Oasis" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 01</div>
+                    <h3 class="track-title">Sacred Oasis</h3>
+                    <div class="track-genre">Brand Identity & Packaging</div>
+                    <p class="track-description">Studio di identità visiva per un brand premium di benessere. Il progetto esplora la simmetria geometrica e l'uso di palette cromatiche minimaliste e profonde. Il packaging combina texture tattili astratte a una pulizia tipografica sans-serif rigorosa, evocando un senso di lusso spirituale e purezza d'avanguardia.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 02 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 02 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/hotel_reverie.jpg" alt="Hotel Reverie" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 02</div>
+                    <h3 class="track-title">Hotel Reverie</h3>
+                    <div class="track-genre">Visual Communication</div>
+                    <p class="track-description">Sviluppo del sistema d'immagine coordinata per un boutique hotel di l luxury. La narrazione visiva si fonda su layout editoriali ad ampio respiro, contrasti cromatici ad alta densità e una scelta tipografica serif classica ma fortemente contemporanea. Un'estetica onirica che non rinuncia alla massima leggibilità formale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 03 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 03 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/brochure_moma.jpg" alt="Brochure MOMA" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 03</div>
+                    <h3 class="track-title">Brochure MOMA</h3>
+                    <div class="track-genre">Editorial Design</div>
+                    <p class="track-description">Progetto di impaginazione editoriale per una retrospettiva d'arte moderna. Ispirato ai canoni del design svizzero, il layout fa un uso rigoroso della gabbia modulare asimmetrica. Ampi spazi bianchi contrastano con blocchi di testo geometrici e campiture piene, trasformando l'oggetto editoriale in un'estensione stessa dello spazio museale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 04 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 04 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/corporate_kit.jpg" alt="Corporate Kit" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 04</div>
+                    <h3 class="track-title">Corporate Identity Kit</h3>
+                    <div class="track-genre">Brand Identity</div>
+                    <p class="track-description">Studio coordinato comprendente biglietto da visita, carta intestata e busta commerciale. Il toolkit istituzionale si focalizza sulla precisione millimetrica dell'allineamento. La riduzione del segno grafico ai minimi termini enfatizza la solidità professionale del brand attraverso un posizionamento micro-tipografico pulito ed impeccabile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 05 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 05 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/mappa_parco.jpg" alt="Mappa del Parco" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 05</div>
+                    <h3 class="track-title">Mappa illustrativa del parco</h3>
+                    <div class="track-genre">Visual Communication & Illustration</div>
+                    <p class="track-description">Sintesi visiva ed infografica avanzata del territorio. Il progetto coniuga la precisione dell'iconografia vettoriale alla fluidità delle forme organiche naturali del parco. La palette cromatica armonica permette una distinzione immediata dei percorsi strutturati, bilanciando perfettamente la complessità informativa con un'eccezionale pulizia estetica.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 06 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 06 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/asroma_rebranding.jpg" alt="AS Roma Rebranding" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 06</div>
+                    <h3 class="track-title">Rebranding AS Roma</h3>
+                    <div class="track-genre">Rebranding</div>
+                    <p class="track-description">Proposta di modernizzazione radicale degli asset visivi del club per l'era digitale. Lo stemma storico viene sintetizzato in un monogramma geometrico puro ad alto impatto. I leggendari colori Giallorossi vengono ricalibrati digitalmente per schermi e merchandising contemporanei, supportati da una tipografia custom dal taglio monumentale ed aggressivo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 07 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 07 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/locandina_mostra.jpg" alt="Locandina Mostra" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 07</div>
+                    <h3 class="track-title">Locandina mostra d'arte</h3>
+                    <div class="track-genre">Poster Design</div>
+                    <p class="track-description">Manifesto culturale d'avanguardia basato sulla decostruzione spaziale. Il design rompe le regole tipografiche classiche lavorando su contrasti estremi in bianco e nero. L'inserimento controllato di texture digitali grezze e sovrapposizioni asimmetriche genera una forte tensione visiva che aggancia all'istante lo sguardo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 08 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 08 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/poster_butterfly.jpg" alt="Poster Butterfly" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 08</div>
+                    <h3 class="track-title">Poster Butterfly</h3>
+                    <div class="track-genre">Illustration & Poster Design</div>
+                    <p class="track-description">Una celebrazione geometrica della simmetria biologica reinterpretata in chiave tecnologica. L'illustrazione principale fonde tracciati organici a sottili griglie vettoriali di impostazione cyber-punk. Il contrasto drammatico tra lo sfondo scuro e gli accenti neon blu e viola genera una straordinaria vibrazione visiva.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 09 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 09 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/carnevale_venezia.jpg" alt="Carnevale di Venezia" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 09</div>
+                    <h3 class="track-title">Carnevale di Venezia</h3>
+                    <div class="track-genre">Advertising & Event Branding</div>
+                    <p class="track-description">Campagna pubblicitaria concettuale. Il visual fonde il mistero secolare della maschera classica con elementi espressivi digitali e glitch-art. La palette cromatica profonda, spezzata da bagliori viola al neon, reinterpreta la traditione veneziana con un linguaggio visivo tagliente, ipnotico e fortemente contemporaneo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 10 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 10 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/noi_siamo_domani.jpg" alt="Noi Siamo Domani" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 10</div>
+                    <h3 class="track-title">Progetto "Noi Siamo Domani"</h3>
+                    <div class="track-genre">Social Advertising</div>
+                    <p class="track-description">Campagna di comunicazione sociale ad altissimo impatto emotivo. Il layout è scandito da una tipografia bold extra-black che taglia lo spazio visivo diagonalmente, ancorandosi a scatti fotografici in bianco e nero ad alto contrasto. Un design focalizzato sul senso di urgenza e sul dinamismo giovanile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 11 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 11 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/progetto_scarpa.jpg" alt="Progetto Scarpa" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 11</div>
+                    <h3 class="track-title">Progetto Scarpa</h3>
+                    <div class="track-genre">Advertising & Packaging</div>
+                    <p class="track-description">Concept commerciale per calzature sportive ingegneristiche. La composizione visiva sfrutta direttrici di forza diagonali e fasci di luce radente per accentuare l'aerodinamicità strutturale del prodotto. L'impaginazione evoca i dettagli tecnici delle interfacce software di progettazione, unendo moda e tech.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACK 12 -->
+        <div class="project-track">
+            <div class="track-grid">
+                <div class="track-media-box">
+                    <div class="media-placeholder">
+                        <div class="placeholder-disc"></div>
+                        <span>[ Track 12 Cover Placeholder ]</span>
+                    </div>
+                    <img class="track-img" src="immagini/tre_chicchi.jpg" alt="3 Chicchi" onerror="this.style.display='none';">
+                </div>
+                <div class="track-details">
+                    <div class="track-index">TRACK 12</div>
+                    <h3 class="track-title">3 Chicchi</h3>
+                    <div class="track-genre">Packaging & Brand Identity</div>
+                    <p class="track-description">Identità di packaging per una linea di caffè biologico artigianale di alta gamma. Il brand fa leva su eleganti pattern geometrici minimalisti per differenziare le origini geografiche dei chicchi. L'estetica globale trasmette artigianalità e lusso ecocompatibile tramite scelte cartotecniche e tipografiche chiare e raffinate.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- TECHNICAL FREQUENCIES (SKILLS) -->
+    <section class="audio-profile">
+        <div class="section-header">// SPECIFICHE TECNICHE / EQUALIZZAZIONE COMPETENZE</div>
+        <div class="skills-waveform">
+            <div class="waveform-node"><h3>Graphic Design</h3><span class="node-freq">98Hz</span></div>
+            <div class="waveform-node"><h3>Brand Identity</h3><span class="node-freq">120Hz</span></div>
+            <div class="waveform-node"><h3>Advertising</h3><span class="node-freq">85Hz</span></div>
+            <div class="waveform-node"><h3>Impaginazione</h3><span class="node-freq">140Hz</span></div>
+            <div class="waveform-node"><h3>Adobe Illustrator</h3><span class="node-freq">220Hz</span></div>
+            <div class="waveform-node"><h3>Adobe Photoshop</h3><span class="node-freq">200Hz</span></div>
+            <div class="waveform-node"><h3>Comunicazione Visiva</h3><span class="node-freq">105Hz</span></div>
+            <div class="waveform-node"><h3>Progettazione Grafica</h3><span class="node-freq">130Hz</span></div>
+            <div class="waveform-node"><h3>Visual Storytelling</h3><span class="node-freq">90Hz</span></div>
+        </div>
+    </section>
+
+    <!-- OUTRO FOOTER CONTAINER -->
+    <section class="outro-player">
+        <p class="outro-quote">
+            "Ogni progetto rappresenta una traccia nel mio percorso di crescita professionale e creativa. Questo portfolio racconta il mio modo di osservare, progettare e comunicare attraverso il linguaggio della grafica."
+        </p>
+        <footer>
+            <div>&copy; 2026 Samuele Domenichini — Masterpiece Edition</div>
+            <div>Istituto Carlo Urbani — Ostia</div>
+        </footer>
+    </section>
+
+    <!-- INTERSECTION OBSERVER SCRIPT FOR STREAMLINED REVEALS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tracks = document.querySelectorAll('.project-track');
+            
+            const runObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, threshold: 0.12 });
+
+            tracks.forEach(track => runObserver.observe(track));
+        });
+    </script>
+</body>
+</html>

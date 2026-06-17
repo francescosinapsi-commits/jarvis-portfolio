@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMUELE DOMENICHINI — LIFE ON TRACK PORTFOLIO</title>
+    <!-- Google Fonts Inclusi da Linee Guida -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* DESIGN SYSTEM & CONFIGURAZIONE CROMATICA ACCENTI NEON */
+        :root {
+            --bg-dark-pure: #050505;
+            --bg-surface: #111111;
+            --bg-card: #1A1A1A;
+            --text-pure: #FFFFFF;
+            --accent-violet: #B9A7FF;
+            --accent-blue: #5E7CFF;
+            --font-titles: 'Bebas Neue', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-details: 'Montserrat', sans-serif;
+            --transition-cinema: all 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            background-color: var(--bg-dark-pure);
+            color: var(--text-pure);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* SCROLLBAR CUSTOM PREMIUM */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark-pure);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 3px;
+        }
+
+        /* 1. INTRO CINEMATOGRAFICA OVERLAY */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-dark-pure);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition-cinema);
+            overflow: hidden;
+        }
+
+        .particles-canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .turntable-box {
+            position: relative;
+            width: 380px;
+            height: 380px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .vinyl-record {
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, #000 18%, #141414 22%, #050505 28%, #111 35%, #080808 45%, #1c1c1c 55%, #000 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(94, 124, 255, 0.2), inset 0 0 20px rgba(0,0,0,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: spinVinyl 15s linear infinite;
+            position: relative;
+        }
+
+        .vinyl-neon-ring {
+            position: absolute;
+            width: 326px;
+            height: 326px;
+            border: 1px solid var(--accent-blue);
+            border-radius: 50%;
+            opacity: 0.6;
+            box-shadow: 0 0 15px var(--accent-blue);
+        }
+
+        .vinyl-label {
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle, #fff 20%, var(--accent-violet) 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .vinyl-label span {
+            font-family: var(--font-titles);
+            font-size: 1.1rem;
+            color: var(--bg-dark-pure);
+            line-height: 1;
+            letter-spacing: 0.05em;
+        }
+
+        .tonearm {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            width: 120px;
+            height: 200px;
+            transform-origin: top right;
+            transform: rotate(15deg);
+            z-index: 5;
+            pointer-events: none;
+            transition: all 1s ease;
+        }
+
+        .intro-typography {
+            text-align: center;
+            margin-top: 30px;
+            z-index: 10;
+        }
+
+        .intro-title {
+            font-family: var(--font-titles);
+            font-size: 3rem;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInReveal 1s ease forwards 0.5s;
+        }
+
+        .intro-subtitle {
+            font-family: var(--font-details);
+            font-size: 0.85rem;
+            color: var(--accent-violet);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInReveal 1s ease forwards 1.2s;
+        }
+
+        .btn-start {
+            margin-top: 40px;
+            padding: 12px 35px;
+            background: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--text-pure);
+            font-family: var(--font-details);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(94, 124, 255, 0.1);
+            animation: fadeInReveal 1s ease forwards 2s;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-start:hover {
+            background: var(--accent-blue);
+            box-shadow: 0 0 25px var(--accent-blue);
+            transform: scale(1.05);
+        }
+
+        /* ZOOM PORTALE TRANSITION CLASS */
+        .portal-zoom-active {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(3);
+        }
+
+        /* KEYFRAMES INTRO CORRETTI */
+        @keyframes spinVinyl {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes fadeInReveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 2. NAVIGATION BAR SYSTEM */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 500;
+            background: linear-gradient(to bottom, rgba(5,5,5,0.9), transparent);
+            backdrop-filter: blur(5px);
+        }
+        .nav-logo {
+            font-family: var(--font-titles);
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+        .nav-album-title {
+            font-family: var(--font-details);
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* 3. HERO SECTION WITH AUDIO WAVE VISUALIZER */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 8%;
+            position: relative;
+            background: radial-gradient(circle at 15% 50%, rgba(94, 124, 255, 0.08), transparent 45%);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 5;
+        }
+
+        .hero-section h1 {
+            font-family: var(--font-titles);
+            font-size: clamp(4rem, 10vw, 8rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .hero-section h2 {
+            font-family: var(--font-details);
+            font-size: clamp(1rem, 2.5vw, 1.8rem);
+            color: var(--accent-violet);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 15px;
+        }
+
+        .hero-slogan {
+            font-family: var(--font-body);
+            font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+            color: #8e8e93;
+            max-width: 600px;
+            margin-top: 35px;
+            border-left: 2px solid var(--accent-blue);
+            padding-left: 20px;
+        }
+
+        /* EQUALIZER BACKGROUND ANIMATION */
+        .hero-visualizer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 2%;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .visualizer-bar {
+            width: calc(100% / 40 - 4px);
+            background: linear-gradient(to top, var(--accent-blue), var(--accent-violet));
+            border-radius: 4px 4px 0 0;
+            animation: waveDance 1.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes waveDance {
+            0% { height: 10%; }
+            100% { height: 95%; }
+        }
+
+        /* Generazione dinamica ritmi barre per eliminare monotonia */
+        .visualizer-bar:nth-child(3n) { animation-duration: 2.2s; }
+        .visualizer-bar:nth-child(2n) { animation-duration: 1.4s; }
+        .visualizer-bar:nth-child(5n) { animation-duration: 1.9s; }
+
+        /* 4. SEZIONE PROGETTI ASIMMETRICA 70/30 (TRACKLIST) */
+        .tracklist-section {
+            padding: 120px 0;
+            background-color: var(--bg-surface);
+        }
+
+        .section-main-title {
+            font-family: var(--font-titles);
+            font-size: 5rem;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .section-main-title::after {
+            content: 'LP TRACKS';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-details);
+            font-size: 0.8rem;
+            letter-spacing: 8px;
+            color: var(--accent-blue);
+        }
+
+        .track-node {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 60px 4%;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--transition-cinema);
+        }
+
+        .track-node.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .track-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            width: 100%;
+            gap: 40px;
+        }
+
+        @media (min-width: 992px) {
+            .track-grid {
+                grid-template-columns: 12fr 5fr; /* Esatto bilanciamento strutturale 70% e 30% richiesto */
+            }
+            .track-node:nth-child(even) .track-grid {
+                direction: rtl;
+            }
+            .track-node:nth-child(even) .track-meta-panel {
+                direction: ltr;
+                padding-right: 40px;
+            }
+        }
+
+        /* PANNELLO IMMAGINE 70% PROGETTI */
+        .track-display-panel {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .track-img-fallback {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #151518 0%, #09090b 100%);
+            color: rgba(255,255,255,0.1);
+            font-family: var(--font-titles);
+            font-size: 6rem;
+            z-index: 1;
+        }
+
+        .fallback-subtitle {
+            font-family: var(--font-details);
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--accent-blue);
+            margin-top: 10px;
+            opacity: 0.6;
+        }
+
+        .track-main-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            transition: transform 1.2s ease;
+        }
+
+        .track-display-panel:hover .track-main-image {
+            transform: scale(1.03);
+        }
+
+        /* PANNELLO METADATI 30% DESCRIZIONE */
+        .track-meta-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .track-number {
+            font-family: var(--font-details);
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .track-project-title {
+            font-family: var(--font-titles);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .track-tag-cat {
+            display: inline-block;
+            font-family: var(--font-details);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--accent-violet);
+            border: 1px solid rgba(185, 167, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 2px;
+            align-self: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .track-brief {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #a2a2a7;
+            text-align: justify;
+        }
+
+        /* 5. SEZIONE CHI SONO (ALBUM BOOKLET STYLE) */
+        .booklet-section {
+            padding: 140px 8%;
+            background-color: var(--bg-dark-pure);
+            position: relative;
+        }
+
+        .booklet-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .booklet-grid { grid-template-columns: 1fr 1.2fr; }
+        }
+
+        .booklet-art-frame {
+            background-color: var(--bg-card);
+            aspect-ratio: 1 / 1;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 50px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .booklet-art-frame::before {
+            content: 'CREDITS';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: var(--font-details);
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 2px;
+        }
+
+        .booklet-profile-title {
+            font-family: var(--font-titles);
+            font-size: 3.5rem;
+            line-height: 0.9;
+        }
+
+        .booklet-info-text {
+            font-family: var(--font-body);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #d1d1d6;
+        }
+
+        /* 6. SEZIONE COMPETENZE (PANNELLO DI CONTROLLO MIXER) */
+        .console-section {
+            padding: 120px 8%;
+            background-color: var(--bg-surface);
+            border-top: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .mixer-board {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 1100px;
+            margin: 45px auto 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 40px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .mixer-channel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 320px;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .mixer-slider-track {
+            position: relative;
+            width: 4px;
+            height: 200px;
+            background-color: #000;
+            border-radius: 2px;
+        }
+
+        .mixer-fader-handle {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 45px;
+            background: linear-gradient(to right, #3a3a3a, #1a1a1a, #3a3a3a);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 3px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.9);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            bottom: 0; /* Controllato via JS */
+            transition: bottom 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .mixer-fader-handle::after {
+            content: '';
+            width: 100%;
+            height: 3px;
+            background-color: var(--accent-blue);
+            box-shadow: 0 0 8px var(--accent-blue);
+        }
+
+        .mixer-channel-title {
+            font-family: var(--font-details);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .mixer-db-value {
+            font-family: var(--font-titles);
+            font-size: 1.4rem;
+            color: var(--accent-violet);
+        }
+
+        /* 7. FINALE OUTRO EXCLUSIVE */
+        .outro-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle, #111 0%, var(--bg-dark-pure) 70%);
+            padding: 0 6%;
+            position: relative;
+        }
+
+        .outro-vinyl-box {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 40px;
+            opacity: 0.7;
+        }
+
+        .outro-vinyl-box .vinyl-record {
+            width: 100%;
+            height: 100%;
+            animation: spinVinyl 35s linear infinite; /* Rallentato drasticamente per effetto dissolvenza finale */
+        }
+
+        .outro-text-statement {
+            font-family: var(--font-body);
+            font-size: clamp(1.2rem, 2.5vw, 2rem);
+            max-width: 800px;
+            line-height: 1.5;
+            color: #e5e5ea;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .signature-title {
+            font-family: var(--font-titles);
+            font-size: 3rem;
+            letter-spacing: 2px;
+        }
+
+        .signature-sub {
+            font-family: var(--font-details);
+            font-size: 0.85rem;
+            letter-spacing: 5px;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. INTRO CINEMATOGRAFICA OVERLAY SCREEN -->
+    <div id="intro-overlay">
+        <canvas class="particles-canvas" id="introParticles"></canvas>
+        <div class="turntable-box" id="turntableBox">
+            <div class="vinyl-neon-ring"></div>
+            <div class="vinyl-record">
+                <div class="vinyl-label">
+                    <span>S. Domenichini<br><small style="font-size:0.5rem; color:#444;">2026</small></span>
+                </div>
+            </div>
+            <!-- Braccetto fonorivelatore SVG Realistico -->
+            <svg class="tonearm" id="tonearm" viewBox="0 0 100 200">
+                <path d="M90,10 Q70,60 80,120 L75,170 L85,175" fill="none" stroke="#d1d1d6" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="90" cy="10" r="8" fill="#48484a"/>
+                <rect x="70" y="170" width="12" height="18" rx="2" fill="#ff4500" transform="rotate(-10 76 170)"/>
+            </svg>
+        </div>
+        <div class="intro-typography">
+            <div class="intro-title">Samuele Domenichini</div>
+            <div class="intro-subtitle">Grafica • Pubblicità • Comunicazione</div>
+            <button class="btn-start" onclick="triggerPortalTransition()">Premi Start</button>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATIVE HEADER NAVIGATION -->
+    <nav>
+        <div class="nav-logo">S. DOMENICHINI</div>
+        <div class="nav-album-title">ALBUM CONCETTO: LIFE ON TRACK</div>
+    </nav>
+
+    <!-- 2. HERO SECTION CON EQ ATTIVO -->
+    <section class="hero-section" id="hero">
+        <div class="hero-content">
+            <h1 style="font-family: var(--font-titles);">Samuele Domenichini</h1>
+            <h2>Portfolio Creativo 2026</h2>
+            <p class="hero-slogan">"Ogni progetto è una traccia del mio percorso."</p>
+        </div>
+        <div class="hero-visualizer" id="visualizerEngine"></div>
+    </section>
+
+    <!-- 3. SEZIONE TRACKLIST PROGETTI (BILANCIAMENTO STRUTTURALE 70% IMMAGINE / 30% TESTO) -->
+    <section class="tracklist-section" id="tracklist">
+        <div class="section-main-title">TRACKLIST</div>
+
+        <!-- TRACCIA 01 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 01<div class="fallback-subtitle">SACRED OASIS</div></div>
+                    <img class="track-main-image" src="immagini/sacred_oasis.jpg" alt="Sacred Oasis" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 01</div>
+                    <h3 class="track-project-title">Sacred Oasis</h3>
+                    <div class="track-tag-cat">Brand Identity & Packaging</div>
+                    <p class="track-brief">Studio di identità visiva per un brand premium di benessere. Il progetto esplora la simmetria geometrica e l'uso di palette cromatiche minimaliste e profonde. Il packaging combina texture tattili astratte a una pulizia tipografica sans-serif rigorosa, evocando un senso di lusso spirituale e purezza d'avanguardia.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 02 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 02<div class="fallback-subtitle">HOTEL REVERIE</div></div>
+                    <img class="track-main-image" src="immagini/hotel_reverie.jpg" alt="Hotel Reverie" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 02</div>
+                    <h3 class="track-project-title">Hotel Reverie</h3>
+                    <div class="track-tag-cat">Visual Communication</div>
+                    <p class="track-brief">Sviluppo del sistema d'immagine coordinata per un boutique hotel di lusso. La narrazione visiva si fonda su layout editoriali ad ampio respiro, contrasti cromatici ad alta densità e una scelta tipografica serif classica ma fortemente contemporanea. Un'estetica onirica che non rinuncia alla massima leggibilità formale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 03 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 03<div class="fallback-subtitle">MOMA BROCHURE</div></div>
+                    <img class="track-main-image" src="immagini/brochure_moma.jpg" alt="Brochure MOMA" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 03</div>
+                    <h3 class="track-project-title">MOMA Brochure</h3>
+                    <div class="track-tag-cat">Editorial Design</div>
+                    <p class="track-brief">Progetto di impaginazione editoriale per una retrospettiva d'arte moderna. Ispirato ai canoni del design svizzero, il layout fa un uso rigoroso della gabbia modulare asimmetrica. Ampi spazi bianchi contrastano con blocchi di testo geometrici e campiture piene, trasformando l'oggetto editoriale in un'estensione stessa dello spazio museale.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 04 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 04<div class="fallback-subtitle">REBRANDING AS ROMA</div></div>
+                    <img class="track-main-image" src="immagini/asroma_rebranding.jpg" alt="Rebranding AS Roma" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 04</div>
+                    <h3 class="track-project-title">Rebranding AS Roma</h3>
+                    <div class="track-tag-cat">Sports Rebranding</div>
+                    <p class="track-brief">Proposta di modernizzazione radicale degli asset visivi del club per l'era digitale. Lo stemma storico viene sintetizzato in un monogramma geometrico puro ad alto impatto. I leggendari colori Giallorossi vengono ricalibrati digitalmente per schermi e merchandising contemporanei, supportati da una tipografia custom dal taglio monumentale ed aggressivo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 05 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 05<div class="fallback-subtitle">MAPPA DEL PARCO</div></div>
+                    <img class="track-main-image" src="immagini/mappa_parco.jpg" alt="Mappa del Parco" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 05</div>
+                    <h3 class="track-project-title">Mappa del Parco</h3>
+                    <div class="track-tag-cat">Infographic & Illustration</div>
+                    <p class="track-brief">Sintesi visiva ed infografica avanzata del territorio. Il progetto coniuga la precisione dell'iconografia vettoriale alla fluidità delle forme organiche naturali del parco. La palette cromatica armonica permette una distinzione immediata dei percorsi strutturati, bilanciando perfettamente la complessità informativa con un'eccezionale pulizia estetica.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 06 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 06<div class="fallback-subtitle">CORPORATE IDENTITY</div></div>
+                    <img class="track-main-image" src="immagini/corporate_kit.jpg" alt="Corporate Identity Kit" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 06</div>
+                    <h3 class="track-project-title">Corporate Kit</h3>
+                    <div class="track-tag-cat">Brand Identity</div>
+                    <p class="track-brief">Studio coordinato comprendente biglietto da visita, carta intestata e busta commerciale. Il toolkit istituzionale si focalizza sulla precisione millimetrica dell'allineamento. La riduzione del segno grafico ai minimi termini enfatizza la solidità professionale del brand attraverso un posizionamento micro-tipografico pulito ed impeccabile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 07 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 07<div class="fallback-subtitle">LOCANDINA MOSTRA</div></div>
+                    <img class="track-main-image" src="immagini/locandina_mostra.jpg" alt="Locandina Mostra" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 07</div>
+                    <h3 class="track-project-title">Locandina Mostra</h3>
+                    <div class="track-tag-cat">Poster Design</div>
+                    <p class="track-brief">Manifesto culturale d'avanguardia basato sulla decostruzione spaziale. Il design rompe le regole tipografiche classiche lavorando su contrasti estremi in bianco e nero. L'inserimento controllato di texture digitali grezze e sovrapposizioni asimmetriche genera una forte tensione visiva che aggancia all'istante lo sguardo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 08 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 08<div class="fallback-subtitle">POSTER BUTTERFLY</div></div>
+                    <img class="track-main-image" src="immagini/poster_butterfly.jpg" alt="Poster Butterfly" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 08</div>
+                    <h3 class="track-project-title">Poster Butterfly</h3>
+                    <div class="track-tag-cat">Cyber Illustration</div>
+                    <p class="track-brief">Una celebrazione geometrica della simmetria biologica reinterpretata in chiave tecnologica. L'illustrazione principale fonde tracciati organici a sottili griglie vettoriali di impostazione cyber-punk. Il contrasto drammatico tra lo sfondo scuro e gli accenti neon blu e viola genera una straordinaria vibrazione visiva.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 09 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 09<div class="fallback-subtitle">CARNEVALE DI VENEZIA</div></div>
+                    <img class="track-main-image" src="immagini/carnevale_venezia.jpg" alt="Carnevale di Venezia" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 09</div>
+                    <h3 class="track-project-title">Carnevale di Venezia</h3>
+                    <div class="track-tag-cat">Event Advertising</div>
+                    <p class="track-brief">Campagna pubblicitaria concettuale. Il visual fonde il mistero secolare della maschera classica con elementi espressivi digitali e glitch-art. La palette cromatica profonda, spezzata da bagliori viola al neon, reinterpreta la traditione veneziana con un linguaggio visivo tagliente, ipnotico e fortemente contemporaneo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 10 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 10<div class="fallback-subtitle">NOI SIAMO DOMANI</div></div>
+                    <img class="track-main-image" src="immagini/noi_siamo_domani.jpg" alt="Noi Siamo Domani" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 10</div>
+                    <h3 class="track-project-title">Noi Siamo Domani</h3>
+                    <div class="track-tag-cat">Social Campaign</div>
+                    <p class="track-brief">Campagna di comunicazione sociale ad altissimo impatto emotivo. Il layout è scandito da una tipografia bold extra-black che taglia lo spazio visivo diagonalmente, ancorandosi a scatti fotografici in bianco e nero ad alto contrasto. Un design focalizzato sul senso di urgenza e sul dinamismo giovanile.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 11 -->
+        <div class="track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 11<div class="fallback-subtitle">PROGETTO SCARPA</div></div>
+                    <img class="track-main-image" src="immagini/progetto_scarpa.jpg" alt="Progetto Scarpa" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 11</div>
+                    <h3 class="track-project-title">Progetto Scarpa</h3>
+                    <div class="track-tag-cat">Commercial Advertising</div>
+                    <p class="track-brief">Concept commerciale per calzature sportive ingegneristiche. La composizione visiva sfrutta direttrici di forza diagonali e fasci di luce radente per accentuare l'aerodinamicità strutturale del prodotto. L'impaginazione evoca i dettagli tecnici delle interfacce software di progettazione, unendo moda e tech.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACCIA 12 -->
+        <div class="project-track track-node">
+            <div class="track-grid">
+                <div class="track-display-panel">
+                    <div class="track-img-fallback">TRACK 12<div class="fallback-subtitle">3 CHICCHI</div></div>
+                    <img class="track-main-image" src="immagini/tre_chicchi.jpg" alt="3 Chicchi" onerror="this.style.display='none';">
+                </div>
+                <div class="track-meta-panel">
+                    <div class="track-number">TRACK 12</div>
+                    <h3 class="track-project-title">3 Chicchi</h3>
+                    <div class="track-tag-cat">Gourmet Packaging</div>
+                    <p class="track-brief">Identità di packaging per una linea di caffè biologico artigianale di alta gamma. Il brand fa leva su eleganti pattern geometrici minimalisti per differenziare le origini geografiche dei chicchi. L'estetica globale trasmette artigianalità e lusso ecocompatibile tramite scelte cartotecniche e tipografiche chiare e raffinate.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. SEZIONE CHI SONO (BOOKLET EDITION) -->
+    <section class="booklet-section">
+        <div class="section-main-title">BOOKLET CREDITS</div>
+        <div class="booklet-grid">
+            <div class="booklet-art-frame">
+                <div class="booklet-profile-title">SAMUELE<br><span style="color:var(--accent-blue);">DOMENICHINI</span></div>
+                <p style="margin-top:20px; font-family:var(--font-details); font-size:0.75rem; letter-spacing:3px;">CLASS OF 2026</p>
+            </div>
+            <div>
+                <p class="booklet-info-text">
+                    Frequento l'Istituto Carlo Urbani nell'indirizzo Grafica, Pubblicità e Tecniche della Comunicazione. Questo portfolio raccoglie le tracce visive della mia evoluzione progettuale. Attraverso lo studio metodologico del brand, l'impaginazione editoriale e la gestione dello spazio visivo, ho convertito le influenze della cultura urban in un approccio grafico rigoroso, geometrico e pronto per il mercato della comunicazione visiva.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. SEZIONE COMPETENZE (CONSOLLE MIXER AUDIO STEREO) -->
+    <section class="console-section">
+        <div class="section-main-title">EQUALIZER PANEL</div>
+        <div class="mixer-board" id="mixerBoard">
+            <!-- Channel 1 -->
+            <div class="mixer-channel" data-level="92%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Graphic Design</div>
+            </div>
+            <!-- Channel 2 -->
+            <div class="mixer-channel" data-level="88%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Brand Identity</div>
+            </div>
+            <!-- Channel 3 -->
+            <div class="mixer-channel" data-level="85%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Advertising</div>
+            </div>
+            <!-- Channel 4 -->
+            <div class="mixer-channel" data-level="95%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Illustrator</div>
+            </div>
+            <!-- Channel 5 -->
+            <div class="mixer-channel" data-level="90%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Photoshop</div>
+            </div>
+            <!-- Channel 6 -->
+            <div class="mixer-channel" data-level="87%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Visual Comm.</div>
+            </div>
+            <!-- Channel 7 -->
+            <div class="mixer-channel" data-level="84%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Packaging</div>
+            </div>
+            <!-- Channel 8 -->
+            <div class="mixer-channel" data-level="89%">
+                <div class="mixer-db-value">0.0 dB</div>
+                <div class="mixer-slider-track">
+                    <div class="mixer-fader-handle"></div>
+                </div>
+                <div class="mixer-channel-title">Editorial Des.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. OUTRO FINALE CINEMATOGRAFICO -->
+    <section class="outro-section">
+        <div class="outro-vinyl-box">
+            <div class="vinyl-record">
+                <div class="vinyl-label" style="width:60px; height:60px;"></div>
+            </div>
+        </div>
+        <p class="outro-text-statement">
+            "Questo portfolio raccoglie le tracce che raccontano la mia crescita creativa."
+        </p>
+        <div class="signature-title">Samuele Domenichini</div>
+        <div class="signature-sub">Grafica • Pubblicità • Comunicazione</div>
+    </section>
+
+    <!-- JAVASCRIPT ANIMATION CORE ENGINE -->
+    <script>
+        // Generazione Dinamica Barre Visualizzatore Audio Hero
+        const visualizerContainer = id => document.getElementById(id);
+        const engine = visualizerContainer('visualizerEngine');
+        const barsCount = 50;
+        for (let i = 0; i < barsCount; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('visualizer-bar');
+            bar.style.animationDelay = `${i * 0.04}s`;
+            engine.appendChild(bar);
+        }
+
+        // Sistema di Generazione Particelle di Sfondo per l'Intro
+        const canvas = document.getElementById('introParticles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = Math.random() * -0.5 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(185, 167, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Transizione Portale Cinematografica all'avvio
+        function triggerPortalTransition() {
+            const tonearm = document.getElementById('tonearm');
+            const turntable = document.getElementById('turntableBox');
+            const overlay = document.getElementById('introOverlay');
+            
+            // Movimento del braccetto sul vinile
+            tonearm.style.transform = "rotate(32deg)";
+            
+            setTimeout(() => {
+                document.getElementById('intro-overlay').classList.add('portal-zoom-active');
+                document.body.style.overflowY = "auto";
+            }, 800);
+        }
+
+        // Intersection Observer per animazione tracce e fader mixer audio
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.overflowY = "hidden"; // Blocca scroll prima del via
+            
+            const nodes = document.querySelectorAll('.track-node');
+            const trackObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.15 });
+            nodes.forEach(node => trackObserver.observe(node));
+
+            // Controllo Fader Console Competenze
+            const mixerChannels = document.querySelectorAll('.mixer-channel');
+            const mixerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const channel = entry.target;
+                        const targetLevel = channel.getAttribute('data-level');
+                        const fader = channel.querySelector('.mixer-fader-handle');
+                        const dbVal = channel.querySelector('.mixer-db-value');
+                        
+                        fader.style.bottom = targetLevel;
+                        dbVal.innerText = `+ ${targetLevel.replace('%', '') / 10} dB`;
+                    }
+                });
+            }, { threshold: 0.3 });
+            mixerChannels.forEach(ch => mixerObserver.observe(ch));
+        });
+    </script>
+</body>
+</html>
